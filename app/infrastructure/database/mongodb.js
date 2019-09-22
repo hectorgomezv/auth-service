@@ -1,4 +1,5 @@
 const { MongoClient } = require('mongodb');
+const { logger } = require('../logger');
 
 const {
   MONGO_CONNECTION_STRING,
@@ -12,8 +13,15 @@ const client = new MongoClient(MONGO_CONNECTION_STRING, {
 });
 
 const connect = async () => {
-  await client.connect();
-  return client.db(MONGO_DATABASE_NAME);
+  try {
+    await client.connect();
+    await client.db(MONGO_DATABASE_NAME);
+
+    return logger.info(`Connected to database ${MONGO_DATABASE_NAME} on MongoDB`);
+  } catch (err) {
+    logger.error(err);
+    process.exit(1);
+  }
 };
 
 const disconnect = async () => {

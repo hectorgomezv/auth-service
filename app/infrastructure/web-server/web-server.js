@@ -20,6 +20,7 @@ const init = async (port = Number(PORT)) => {
     await app.listen(port);
   } catch (err) {
     logger.error(err);
+    process.exit(1);
   }
 };
 
