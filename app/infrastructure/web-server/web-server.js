@@ -1,21 +1,26 @@
-const app = require('fastify')({
-  logger: true,
-});
+const fastify = require('fastify');
+
+const {
+  logger,
+  config: loggerConfig,
+} = require('../logger');
 const { accountRouter } = require('../../interfaces/routers');
+
+const { PORT } = process.env;
+
+const app = fastify({ logger: loggerConfig });
 
 const mountRouters = () => {
   app.register(accountRouter, { prefix: '/api/account' });
 };
 
-const listen = (port = 3000) => app
-  .listen(port, (err, address) => {
-    if (err) throw err;
-    app.log.info(`server listening on ${address}`);
-  });
-
-const init = (port) => {
-  mountRouters();
-  listen(port);
+const init = async (port = Number(PORT)) => {
+  try {
+    mountRouters();
+    await app.listen(port);
+  } catch (err) {
+    logger.error(err);
+  }
 };
 
 module.exports = {

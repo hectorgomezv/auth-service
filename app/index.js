@@ -3,6 +3,7 @@ require('dotenv').config();
 const {
   webServer,
   database,
+  logger,
 } = require('./infrastructure');
 
 
@@ -11,6 +12,6 @@ const {
     webServer.init();
     database.connect();
   } catch (err) {
-    console.error(err);
+    logger.error(err);
   }
 })();
