@@ -1,3 +1,16 @@
-const { webServer } = require('./infrastructure');
+require('dotenv').config();
 
-(async () => webServer.init())();
+const {
+  webServer,
+  database,
+} = require('./infrastructure');
+
+
+(async () => {
+  try {
+    webServer.init();
+    database.connect();
+  } catch (err) {
+    console.error(err);
+  }
+})();

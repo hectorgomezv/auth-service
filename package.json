@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev": "./node_modules/.bin/nodemon ./app",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -23,8 +24,10 @@
   },
   "dependencies": {
     "@hapi/joi": "^16.1.4",
+    "dotenv": "^8.1.0",
     "fastify": "^2.8.0",
     "jsonwebtoken": "^8.5.1",
+    "mongodb": "^3.3.2",
     "pino": "^5.13.3"
   }
 }
