@@ -28,6 +28,7 @@
     "dotenv": "^8.1.0",
     "fastify": "^2.8.0",
     "jsonwebtoken": "^8.5.1",
+    "migrate-mongo": "^6.0.2",
     "mongodb": "^3.3.2",
     "pino": "^5.13.3"
   }
