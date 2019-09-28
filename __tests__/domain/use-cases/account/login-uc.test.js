@@ -1,32 +1,42 @@
 const bcrypt = require('bcrypt');
+const faker = require('faker');
 const { UNAUTHORIZED } = require('http-status-codes');
+
+const {
+  BAD_LOGIN_ERROR,
+  INACTIVE_USER_ERROR,
+} = require('../../../../app/domain/use-cases/account/errors');
 const { UserRepository } = require('../../../../app/domain/repositories');
 const { login } = require('../../../../app/domain/use-cases/account');
 
+const EMAIL = faker.internet.email();
+
 const CREDENTIALS = {
-  email: 'user@test.com',
-  password: 'testPassword',
+  email: EMAIL,
+  password: faker.internet.password(),
 };
 
 const USER = {
-  email: 'user@test.com',
-  fullName: 'Test user',
-  avatarUrl: 'testUrl',
+  email: EMAIL,
+  fullName: `${faker.name.firstName()} ${faker.name.lastName}`,
+  avatarUrl: faker.internet.url(),
   active: true,
-  roles: ['reader'],
+  roles: [faker.random.word()],
+};
+
+const USER_WITH_SESSIONS = {
+  ...USER,
+  sessions: [{
+    accessToken: faker.random.uuid(),
+    refreshToken: faker.random.uuid(),
+    createdAt: faker.date.past(),
+  }],
 };
 
 describe('[use-cases-tests] [login]', () => {
   beforeEach(() => {
     UserRepository.findByEmail = jest.fn(() => USER);
-    UserRepository.addSession = jest.fn(() => ({
-      ...USER,
-      sessions: [{
-        accessToken: 'accessToken',
-        refreshToken: 'refreshToken',
-        createdAt: new Date(),
-      }],
-    }));
+    UserRepository.addSession = jest.fn(() => USER_WITH_SESSIONS);
   });
 
   it('should fail if the repository can find the user email', async (done) => {
@@ -37,7 +47,7 @@ describe('[use-cases-tests] [login]', () => {
     } catch (err) {
       expect(err).toMatchObject({
         name: 'AuthenticationError',
-        message: 'Bad username or password',
+        message: BAD_LOGIN_ERROR,
         code: UNAUTHORIZED,
       });
       done();
@@ -57,7 +67,7 @@ describe('[use-cases-tests] [login]', () => {
     } catch (err) {
       expect(err).toMatchObject({
         name: 'AuthenticationError',
-        message: 'Inactive user',
+        message: INACTIVE_USER_ERROR,
         pointer: `email:${USER.email}`,
         code: UNAUTHORIZED,
       });
@@ -77,7 +87,7 @@ describe('[use-cases-tests] [login]', () => {
     } catch (err) {
       expect(err).toMatchObject({
         name: 'AuthenticationError',
-        message: 'Bad username or password',
+        message: BAD_LOGIN_ERROR,
         code: UNAUTHORIZED,
       });
       done();
@@ -103,12 +113,7 @@ describe('[use-cases-tests] [login]', () => {
       accessToken: expect.any(String),
       refreshToken: expect.any(String),
       expiresIn: expect.any(Number),
-      user: expect.objectContaining({
-        avatarUrl: expect.any(String),
-        email: expect.any(String),
-        fullName: expect.any(String),
-        roles: expect.any(Array),
-      }),
+      user: USER,
     });
   });
 });

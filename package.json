@@ -20,6 +20,7 @@
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.14.3",
     "eslint-plugin-react-hooks": "^1.7.0",
+    "faker": "^4.1.0",
     "jest": "^24.9.0",
     "nodemon": "^1.19.2",
     "pino-pretty": "^3.2.1"
