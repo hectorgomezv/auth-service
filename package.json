@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "./node_modules/.bin/nodemon ./app",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest -i --watch",
+    "test:coverage": "jest -i --collectCoverage --forceExit"
   },
   "keywords": [],
   "author": "",
@@ -25,12 +26,33 @@
   },
   "dependencies": {
     "@hapi/joi": "^16.1.4",
+    "bcrypt": "^3.0.6",
     "dotenv": "^8.1.0",
     "fastify": "^2.8.0",
     "http-status-codes": "^1.3.2",
     "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.15",
     "migrate-mongo": "^6.0.2",
     "mongodb": "^3.3.2",
     "pino": "^5.13.3"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/__tests__/load",
+      "/__tests__/config/",
+      "coverage",
+      "fixtures",
+      "/load/"
+    ],
+    "setupFiles": [
+      "./__tests__/config/setup.js"
+    ],
+    "coverageDirectory": "./__tests__/coverage/",
+    "coveragePathIgnorePatterns": [
+      "/__tests__/"
+    ],
+    "verbose": true
   }
 }
