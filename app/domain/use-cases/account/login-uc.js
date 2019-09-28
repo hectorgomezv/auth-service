@@ -6,7 +6,7 @@ const { loginValidator } = require('./validators');
 const {
   BAD_LOGIN_ERROR,
   INACTIVE_USER_ERROR,
-} = require('./errors');
+} = require('./error-messages');
 
 const { AuthenticationError } = require('../errors');
 const { UserRepository } = require('../../repositories');
