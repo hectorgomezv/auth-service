@@ -6,7 +6,6 @@ const {
   logger,
 } = require('./infrastructure');
 
-
 (async () => {
   try {
     webServer.init();

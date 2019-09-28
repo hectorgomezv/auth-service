@@ -1,7 +1,7 @@
-const { AccountController } = require('../controllers');
+const { loginController } = require('../controllers/account');
 
 module.exports = (app, opts, done) => {
-  app.get('/', AccountController.login);
+  app.post('/login', loginController);
 
   done();
 };
