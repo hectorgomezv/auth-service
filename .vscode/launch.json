@@ -9,6 +9,16 @@
       "request": "launch",
       "name": "Launch Program",
       "program": "${workspaceFolder}/app/index.js"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug current test",
+      "program": "${workspaceFolder}/node_modules/.bin/jest",
+      "args": ["${relativeFile}"],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "disableOptimisticBPs": true
     }
   ]
 }

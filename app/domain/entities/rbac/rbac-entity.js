@@ -14,7 +14,7 @@ let rbac;
 const authSchema = Joi.object().keys({
   id: Joi.string().required(),
   email: Joi.string().email().required(),
-  roles: Joi.array().items(Joi.string().strict()).unique().required(),
+  role: Joi.string().strict().required(),
   exp: Joi.number().required(),
   accessToken: Joi.string().required(),
 });
@@ -49,8 +49,7 @@ async function isUserAllowedTo(auth, action, resource) {
     throw new AccessError(AUTH_NOT_INITIALIZED);
   }
   await Joi.validate(auth, authSchema);
-  const [roles] = auth.roles;
-  const can = await rbac.can(roles, action, resource);
+  const can = await rbac.can(auth.role, action, resource);
   if (!can) {
     throw new AccessError(NOT_ALLOWED);
   }

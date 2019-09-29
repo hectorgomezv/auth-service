@@ -1,4 +1,8 @@
 class UserRepository {
+  static async create(user) {
+
+  }
+
   static async findByEmail(email) {
     return 'todo';
   }

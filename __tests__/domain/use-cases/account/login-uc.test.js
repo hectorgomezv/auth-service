@@ -21,7 +21,7 @@ const USER = {
   fullName: `${faker.name.firstName()} ${faker.name.lastName}`,
   avatarUrl: faker.internet.url(),
   active: true,
-  roles: [faker.random.word()],
+  role: faker.random.word(),
 };
 
 const USER_WITH_SESSIONS = {
@@ -33,10 +33,10 @@ const USER_WITH_SESSIONS = {
   }],
 };
 
-describe('[use-cases-tests] [login]', () => {
+describe('[use-cases-tests] [account] [login]', () => {
   beforeEach(() => {
-    UserRepository.findByEmail = jest.fn(() => USER);
-    UserRepository.addSession = jest.fn(() => USER_WITH_SESSIONS);
+    UserRepository.findByEmail = jest.fn().mockResolvedValue(USER);
+    UserRepository.addSession = jest.fn().mockResolvedValue(USER_WITH_SESSIONS);
   });
 
   it('should fail if the repository can find the user email', async (done) => {

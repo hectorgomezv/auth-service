@@ -9,5 +9,5 @@ module.exports = (user) => _.pick(user, [
   'avatarUrl',
   'email',
   'fullName',
-  'roles',
+  'role',
 ]);

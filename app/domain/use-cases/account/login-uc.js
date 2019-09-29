@@ -57,7 +57,7 @@ const checkPassword = async (savedPasswordHash, password) => {
 const generateAccessToken = (user) => jwt.sign({
   id: user._id,
   email: user.email,
-  roles: user.roles,
+  role: user.role,
 }, JWT_SECRET, { expiresIn: Number(TOKEN_EXPIRATION) });
 
 /**
