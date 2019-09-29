@@ -94,9 +94,17 @@ describe('[use-cases-tests] [user] [create-user]', () => {
     }
   });
 
-  // it('created users should be initially inactive', async () => {
-
-  // });
+  it('created users should be initially inactive', async () => {
+    await createUser({ role: ROLE }, USER);
+    expect(UserRepository.create).toHaveBeenCalledTimes(1);
+    expect(UserRepository.create).toHaveBeenCalledWith({
+      ...USER,
+      password: expect.any(String),
+      active: false,
+      activationCode: expect.any(String),
+      sessions: [],
+    });
+  });
 
   // describe('email sending', () => {
   //   it('should call email service with the user as argument', async () => {

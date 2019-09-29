@@ -38,7 +38,7 @@
     "nanoid": "^2.1.1",
     "pino": "^5.13.3",
     "rbac": "^5.0.3",
-    "uuidv4": "^5.0.1"
+    "uuid": "^3.3.3"
   },
   "jest": {
     "testEnvironment": "node",
