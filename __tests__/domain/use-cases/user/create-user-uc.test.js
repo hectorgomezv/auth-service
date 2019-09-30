@@ -1,5 +1,6 @@
 const faker = require('faker');
 
+const { ROLES } = require('../../../../app/domain/config/roles-config');
 const { UserRepository } = require('../../../../app/domain/repositories');
 const { RbacEntity } = require('../../../../app/domain/entities/rbac');
 const { createUser } = require('../../../../app/domain/use-cases/user');
@@ -11,7 +12,7 @@ const {
   USER_ALREADY_EXISTS,
 } = require('../../../../app/domain/use-cases/user/error-messages');
 
-const ROLE = 'admin';
+const ROLE = ROLES.ADMIN;
 
 const USER = {
   email: faker.internet.email(),
@@ -46,7 +47,7 @@ describe('[use-cases-tests] [user] [create-user]', () => {
     try {
       await createUser({ role: ROLE }, {
         ...USER,
-        role: 'superAdmin',
+        role: ROLES.SUPERADMIN,
       });
       done.fail();
     } catch (err) {

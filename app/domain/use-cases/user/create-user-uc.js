@@ -16,26 +16,51 @@ const {
   ForbiddenActionError,
 } = require('../errors');
 
+const { ROLES } = require('../../config/roles-config');
 const { UserRepository } = require('../../repositories');
 const { RbacEntity } = require('../../entities/rbac');
 
 const checkPermissions = async (auth, data) => {
   const { role } = data;
 
-  if (role === 'superAdmin') {
+  if (!Object.values(ROLES).includes(role)) {
+    throw new ForbiddenActionError(OPERATION_NOT_SUPPORTED);
+  }
+
+  if (role === ROLES.SUPERADMIN) {
     throw new ForbiddenActionError(FORBIDDEN_SUPERADMIN_CREATION);
   }
 
-  if (role === 'admin') {
-    return RbacEntity.isUserAllowedTo(auth, 'create', 'admin');
-  }
-
-  if (role === 'user') {
-    return RbacEntity.isUserAllowedTo(auth, 'create', 'user');
-  }
-
-  throw new ForbiddenActionError(OPERATION_NOT_SUPPORTED);
+  return RbacEntity.isUserAllowedTo(auth, 'create', role);
 };
+
+/**
+ * Build an user model object from the data passed in.
+ * @param {Object} data data to build the user model.
+ * @returns {UserModel} UserModel built.
+ */
+const buildUserModel = async (data) => {
+  const password = await bcrypt.hash(nanoid(), 10);
+  const activationCode = uuidV4();
+
+  const {
+    email,
+    avatarUrl,
+    fullName,
+    role,
+  } = data;
+
+  return {
+    email,
+    password,
+    avatarUrl,
+    fullName,
+    role,
+    active: false,
+    activationCode,
+    sessions: [],
+  };
+}
 
 const execute = async (auth, data) => {
   await userValidator(data);
@@ -47,28 +72,10 @@ const execute = async (auth, data) => {
     throw new ConflictError(USER_ALREADY_EXISTS, `email:${data.email}`);
   }
 
-  const password = await bcrypt.hash(nanoid(), 10);
-  const activationCode = uuidV4();
+  const userModel = await buildUserModel(data);
+  const created = await UserRepository.create(userModel);
 
   // await EmailRepository.sendNewUserEmail({ email, activationCode });
-
-  const {
-    email,
-    avatarUrl,
-    fullName,
-    role,
-  } = data;
-
-  const created = await UserRepository.create({
-    email,
-    password,
-    avatarUrl,
-    fullName,
-    role,
-    active: false,
-    activationCode,
-    sessions: [],
-  });
 
   return _.omit(created, 'password');
 };
