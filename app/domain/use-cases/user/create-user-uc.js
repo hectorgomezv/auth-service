@@ -17,7 +17,10 @@ const {
 } = require('../errors');
 
 const { ROLES } = require('../../config/roles-config');
-const { UserRepository } = require('../../repositories');
+const {
+  EmailRepository,
+  UserRepository,
+} = require('../../repositories');
 const { RbacEntity } = require('../../entities/rbac');
 
 const checkPermissions = async (auth, data) => {
@@ -60,7 +63,7 @@ const buildUserModel = async (data) => {
     activationCode,
     sessions: [],
   };
-}
+};
 
 const execute = async (auth, data) => {
   await userValidator(data);
@@ -75,7 +78,8 @@ const execute = async (auth, data) => {
   const userModel = await buildUserModel(data);
   const created = await UserRepository.create(userModel);
 
-  // await EmailRepository.sendNewUserEmail({ email, activationCode });
+  const { email, activationCode } = created;
+  await EmailRepository.sendRegistration(email, activationCode);
 
   return _.omit(created, 'password');
 };

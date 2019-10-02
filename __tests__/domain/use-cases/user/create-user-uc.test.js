@@ -1,7 +1,10 @@
 const faker = require('faker');
 
 const { ROLES } = require('../../../../app/domain/config/roles-config');
-const { UserRepository } = require('../../../../app/domain/repositories');
+const {
+  EmailRepository,
+  UserRepository,
+} = require('../../../../app/domain/repositories');
 const { RbacEntity } = require('../../../../app/domain/entities/rbac');
 const { createUser } = require('../../../../app/domain/use-cases/user');
 const { AccessError } = require('../../../../app/domain/entities/errors');
@@ -14,6 +17,8 @@ const {
 
 const ROLE = ROLES.ADMIN;
 
+const ACTIVATION_CODE = faker.random.uuid();
+
 const USER = {
   email: faker.internet.email(),
   fullName: `${faker.name.firstName()} ${faker.name.lastName}`,
@@ -25,7 +30,11 @@ describe('[use-cases-tests] [user] [create-user]', () => {
   beforeEach(() => {
     RbacEntity.isUserAllowedTo = jest.fn().mockResolvedValue(true);
     UserRepository.findByEmail = jest.fn().mockResolvedValue(null);
-    UserRepository.create = jest.fn().mockResolvedValue(USER);
+    UserRepository.create = jest.fn().mockResolvedValue({
+      ...USER,
+      activationCode: ACTIVATION_CODE,
+    });
+    EmailRepository.sendRegistration = jest.fn().mockResolvedValue();
   });
 
   it('should fail if the executor has no permissions to create users', async (done) => {
@@ -107,9 +116,12 @@ describe('[use-cases-tests] [user] [create-user]', () => {
     });
   });
 
-  // describe('email sending', () => {
-  //   it('should call email service with the user as argument', async () => {
-
-  //   });
-  // });
+  describe('Email notifications', () => {
+    it('should call EmailRepository with the address and the activationCode', async () => {
+      await createUser({ role: ROLE }, USER);
+      expect(EmailRepository.sendRegistration).toHaveBeenCalledTimes(1);
+      expect(EmailRepository.sendRegistration)
+        .toHaveBeenCalledWith(USER.email, ACTIVATION_CODE);
+    });
+  });
 });
