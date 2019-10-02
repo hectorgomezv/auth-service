@@ -6,6 +6,8 @@ const {
   MONGO_DATABASE_NAME,
 } = process.env;
 
+let db;
+
 const client = new MongoClient(MONGO_CONNECTION_STRING, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -15,7 +17,7 @@ const client = new MongoClient(MONGO_CONNECTION_STRING, {
 const connect = async () => {
   try {
     await client.connect();
-    await client.db(MONGO_DATABASE_NAME);
+    db = await client.db(MONGO_DATABASE_NAME);
 
     return logger.info(`Connected to database ${MONGO_DATABASE_NAME} on MongoDB`);
   } catch (err) {
@@ -29,7 +31,7 @@ const disconnect = async () => {
 };
 
 module.exports = {
-  client,
+  db,
   connect,
   disconnect,
 };

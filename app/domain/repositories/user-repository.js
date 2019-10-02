@@ -1,12 +1,16 @@
-const { client: db } = require('../../infrastructure/database/mongodb');
+const { db } = require('../../infrastructure/database/mongodb');
+
+const COLLECTION = 'users';
 
 class UserRepository {
   static async create(user) {
-    return db.
+    return db.collection(COLLECTION).insertOne(user);
   }
 
   static async findByEmail(email) {
-    return 'todo';
+    const found = await db.collection(COLLECTION).findOne({ email });
+
+    return found;
   }
 
   static async addSession(userId, session) {

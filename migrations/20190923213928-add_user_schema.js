@@ -5,7 +5,7 @@ const up = async (db) => {
     validator: {
       $jsonSchema: {
         bsonType: 'object',
-        required: ['username', 'email', 'sessions'],
+        required: ['username', 'email', 'password', 'role', 'fullName', 'active', 'sessions'],
         properties: {
           username: {
             bsonType: 'string',
@@ -13,6 +13,24 @@ const up = async (db) => {
           email: {
             bsonType: 'string',
             pattern: '^.+@.+$',
+          },
+          password: {
+            bsonType: 'string',
+          },
+          avatarUrl: {
+            bsonType: 'string',
+          },
+          fullName: {
+            bsonType: 'string',
+          },
+          role: {
+            bsonType: 'string',
+          },
+          active: {
+            bsonType: 'boolean',
+          },
+          activationCode: {
+            bsonType: 'string',
           },
           sessions: {
             bsonType: ['array'],
