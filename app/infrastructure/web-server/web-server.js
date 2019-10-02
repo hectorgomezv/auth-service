@@ -5,7 +5,10 @@ const {
   config: loggerConfig,
 } = require('../logger');
 
-const { accountRouter } = require('../../interfaces/routers');
+const {
+  accountRouter,
+  userRouter,
+} = require('../../interfaces/routers');
 
 const { PORT } = process.env;
 
@@ -13,7 +16,8 @@ const app = fastify({ logger: loggerConfig });
 const baseUrl = '/api/auth';
 
 const mountRouters = () => {
-  app.register(accountRouter, { prefix: `${baseUrl}/account` });
+  app.register(accountRouter, { prefix: `${baseUrl}/accounts` });
+  app.register(userRouter, { prefix: `${baseUrl}/users` });
 };
 
 const init = async (port = Number(PORT)) => {

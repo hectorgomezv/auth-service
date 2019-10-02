@@ -4,11 +4,11 @@ const COLLECTION = 'users';
 
 class UserRepository {
   static async create(user) {
-    return db.collection(COLLECTION).insertOne(user);
+    return db().collection(COLLECTION).insertOne(user);
   }
 
   static async findByEmail(email) {
-    const found = await db.collection(COLLECTION).findOne({ email });
+    const found = await db().collection(COLLECTION).findOne({ email });
 
     return found;
   }
