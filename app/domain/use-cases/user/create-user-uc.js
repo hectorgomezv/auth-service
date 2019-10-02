@@ -17,12 +17,19 @@ const {
 } = require('../errors');
 
 const { ROLES } = require('../../config/roles-config');
+
 const {
   EmailRepository,
   UserRepository,
 } = require('../../repositories');
+
 const { RbacEntity } = require('../../entities/rbac');
 
+/**
+ * Check the permissions to create a new user.
+ * @param {Auth} auth auth info of the user who request the operation.
+ * @param {Object} data data of the user to create.
+ */
 const checkPermissions = async (auth, data) => {
   const { role } = data;
 
@@ -65,6 +72,11 @@ const buildUserModel = async (data) => {
   };
 };
 
+/**
+ * Creates a new user.
+ * @param {Auth} auth auth info of the user who request the operation.
+ * @param {Object} data data to fill the new user profile.
+ */
 const execute = async (auth, data) => {
   await userValidator(data);
   await checkPermissions(auth, data);

@@ -1,6 +1,8 @@
+const { client: db } = require('../../infrastructure/database/mongodb');
+
 class UserRepository {
   static async create(user) {
-
+    return db.
   }
 
   static async findByEmail(email) {

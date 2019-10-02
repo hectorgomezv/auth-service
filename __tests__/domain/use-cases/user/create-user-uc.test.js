@@ -1,14 +1,17 @@
 const faker = require('faker');
 
 const { ROLES } = require('../../../../app/domain/config/roles-config');
+
 const {
   EmailRepository,
   UserRepository,
 } = require('../../../../app/domain/repositories');
+
 const { RbacEntity } = require('../../../../app/domain/entities/rbac');
 const { createUser } = require('../../../../app/domain/use-cases/user');
 const { AccessError } = require('../../../../app/domain/entities/errors');
 const { NOT_ALLOWED } = require('../../../../app/domain/entities/rbac/error-messages');
+
 const {
   FORBIDDEN_SUPERADMIN_CREATION,
   OPERATION_NOT_SUPPORTED,
@@ -16,7 +19,6 @@ const {
 } = require('../../../../app/domain/use-cases/user/error-messages');
 
 const ROLE = ROLES.ADMIN;
-
 const ACTIVATION_CODE = faker.random.uuid();
 
 const USER = {
