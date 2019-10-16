@@ -48,7 +48,7 @@ async function isUserAllowedTo(auth, action, resource) {
   if (!rbac) {
     throw new AccessError(AUTH_NOT_INITIALIZED);
   }
-  await Joi.validate(auth, authSchema);
+  await authSchema.validate(auth);
   const can = await rbac.can(auth.role, action, resource);
   if (!can) {
     throw new AccessError(NOT_ALLOWED);

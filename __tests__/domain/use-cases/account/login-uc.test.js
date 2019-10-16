@@ -110,10 +110,12 @@ describe('[use-cases-tests] [account] [login]', () => {
       createdAt: expect.any(Date),
     });
     expect(result).toMatchObject({
-      accessToken: expect.any(String),
-      refreshToken: expect.any(String),
-      expiresIn: expect.any(Number),
-      user: USER,
+      data: {
+        accessToken: expect.any(String),
+        refreshToken: expect.any(String),
+        expiresIn: expect.any(Number),
+        user: USER,
+      },
     });
   });
 });
