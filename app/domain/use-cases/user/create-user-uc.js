@@ -45,17 +45,16 @@ const checkPermissions = async (auth, data) => {
 };
 
 /**
- * Build an user model object from the data passed in.
- * @param {Object} data data to build the user model.
- * @returns {UserModel} UserModel built.
+ * Build an user object from the data passed in.
+ * @param {Object} data data to build the user.
+ * @returns {User} User built.
  */
-const buildUserModel = async (data) => {
+const buildUser = async (data) => {
   const password = await bcrypt.hash(nanoid(), 10);
   const activationCode = uuidV4();
 
   const {
     email,
-    avatarUrl,
     fullName,
     role,
   } = data;
@@ -63,7 +62,6 @@ const buildUserModel = async (data) => {
   return {
     email,
     password,
-    avatarUrl,
     fullName,
     role,
     active: false,
@@ -87,13 +85,13 @@ const execute = async (auth, data) => {
     throw new ConflictError(USER_ALREADY_EXISTS, `email:${data.email}`);
   }
 
-  const userModel = await buildUserModel(data);
+  const userModel = await buildUser(data);
   const created = await UserRepository.create(userModel);
 
   const { email, activationCode } = created;
   await EmailRepository.sendRegistration(email, activationCode);
 
-  return _.omit(created, 'password');
+  return created;
 };
 
 module.exports = execute;
