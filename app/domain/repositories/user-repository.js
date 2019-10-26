@@ -4,7 +4,9 @@ const COLLECTION = 'users';
 
 class UserRepository {
   static async create(user) {
-    return db().collection(COLLECTION).insertOne(user);
+    const { ops: [item] } = await db().collection(COLLECTION).insertOne(user);
+
+    return item;
   }
 
   static async findByEmail(email) {

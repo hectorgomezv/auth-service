@@ -6,10 +6,13 @@ const {
   logger,
 } = require('./infrastructure');
 
+const { RbacEntity } = require('./domain/entities/rbac');
+
 (async () => {
   try {
-    webServer.init();
-    database.connect();
+    await database.connect();
+    await RbacEntity.init();
+    await webServer.init();
   } catch (err) {
     logger.error(err);
   }

@@ -1,6 +1,6 @@
 # MISC
 NODE_ENV=development
-SUPERADMIN_EMAIL=hector.gomez.varela@gmail.com
+SUPERADMIN_EMAIL=superadmin@email.com
 SUPERADMIN_PASSWORD=superSecret
 
 # WEB
@@ -10,7 +10,7 @@ PORT=4400
 MONGO_CONNECTION_STRING=mongodb://localhost:27017/
 MONGO_DATABASE_NAME=auth-service
 
-# JWT
-JWT_SECRET=supersecret
+# SECURITY
+JWT_SECRET=superJwtSecret
 TOKEN_EXPIRATION=604800
 REFRESH_TOKEN_EXPIRATION=604800

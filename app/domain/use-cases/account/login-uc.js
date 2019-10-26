@@ -90,10 +90,12 @@ const execute = async (data) => {
   });
 
   return {
-    accessToken,
-    refreshToken,
-    expiresIn: Number(TOKEN_EXPIRATION),
-    user,
+    data: {
+      accessToken,
+      refreshToken,
+      expiresIn: Number(TOKEN_EXPIRATION),
+      user,
+    },
   };
 };
 
