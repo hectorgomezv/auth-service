@@ -55,6 +55,7 @@ const buildUser = async (data) => {
 
   const {
     email,
+    avatarUrl,
     fullName,
     role,
   } = data;
@@ -67,6 +68,7 @@ const buildUser = async (data) => {
     active: false,
     activationCode,
     sessions: [],
+    ...(avatarUrl && { avatarUrl }),
   };
 };
 
