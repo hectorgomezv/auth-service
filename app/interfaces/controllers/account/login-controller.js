@@ -5,10 +5,13 @@ const { login } = require('../../../domain/use-cases/account');
 module.exports = async (req, res) => {
   try {
     const data = (req.body && req.body.data) || {};
-    const result = await login(data);
-    res.send({
-      ...result,
-      user: profileAdapter(result.user),
+    const { data: { user, ...rest } } = await login(data);
+
+    return res.send({
+      data: {
+        ...rest,
+        user: profileAdapter(user),
+      },
     });
   } catch (err) {
     throw jsonErrorAdapter(err);

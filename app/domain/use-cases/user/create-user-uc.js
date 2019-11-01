@@ -1,4 +1,3 @@
-const _ = require('lodash');
 const bcrypt = require('bcrypt');
 const nanoid = require('nanoid');
 const uuidV4 = require('uuid/v4');

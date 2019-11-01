@@ -32,10 +32,7 @@ describe('[use-cases-tests] [user] [create-user]', () => {
   beforeEach(() => {
     RbacEntity.isUserAllowedTo = jest.fn().mockResolvedValue(true);
     UserRepository.findByEmail = jest.fn().mockResolvedValue(null);
-    UserRepository.create = jest.fn().mockResolvedValue({
-      ...USER,
-      activationCode: ACTIVATION_CODE,
-    });
+    UserRepository.create = jest.fn().mockResolvedValue(USER);
     EmailRepository.sendRegistration = jest.fn().mockResolvedValue();
   });
 
@@ -123,7 +120,7 @@ describe('[use-cases-tests] [user] [create-user]', () => {
       await createUser({ role: ROLE }, USER);
       expect(EmailRepository.sendRegistration).toHaveBeenCalledTimes(1);
       expect(EmailRepository.sendRegistration)
-        .toHaveBeenCalledWith(USER.email, ACTIVATION_CODE);
+        .toHaveBeenCalledWith(USER.email, expect.any(String));
     });
   });
 });
