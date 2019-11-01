@@ -47,8 +47,11 @@ const execute = async (activationCode, password, repeatedPassword) => {
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
+  const activeUser = await UserRepository.activate(_id, hashedPassword);
 
-  return UserRepository.activate(_id, hashedPassword);
+  return {
+    data: activeUser,
+  };
 };
 
 module.exports = execute;
