@@ -88,10 +88,9 @@ const execute = async (auth, data) => {
   }
 
   const userModel = await buildUser(data);
-  const created = await UserRepository.create(userModel);
-
-  const { email, activationCode } = created;
+  const { email, activationCode } = userModel;
   await EmailRepository.sendRegistration(email, activationCode);
+  const created = await UserRepository.create(userModel);
 
   return created;
 };

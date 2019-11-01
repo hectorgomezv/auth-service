@@ -6,7 +6,7 @@ function buildBaseTemplate(data) {
 
   const template = `
   <!DOCTYPE html>
-  <html lang="${lang}">
+  <html lang="en">
 
   <head>
     <meta charset="UTF-8">

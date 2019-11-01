@@ -3,6 +3,8 @@ const {
   INTERNAL_SERVER_ERROR,
 } = require('http-status-codes');
 
+const { UnknownError } = require('./errors');
+
 const adaptValidationError = ({ details: [validationError] }) => ({
   status: BAD_REQUEST,
   title: 'ValidationError',
@@ -24,4 +26,8 @@ const adaptError = ({
   data,
 });
 
-module.exports = ({ isJoi, ...err }) => (isJoi ? adaptValidationError(err) : adaptError(err));
+module.exports = (err) => {
+  if (err.isJoi) return adaptValidationError(err);
+  if (!err.name) return adaptError(new UnknownError());
+  return adaptError(err);
+};

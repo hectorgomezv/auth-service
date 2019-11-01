@@ -15,6 +15,7 @@ MONGO_DATABASE_NAME=auth-service
 
 # EMAIL
 SENDGRID_API_KEY=YOUR_SENDGRID_API_KEY
+BASE_EMAIL=your_app@your_company.com
 
 # SECURITY
 JWT_SECRET=superJwtSecret

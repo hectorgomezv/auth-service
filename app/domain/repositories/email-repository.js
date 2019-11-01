@@ -1,10 +1,14 @@
 const sendgridMail = require('@sendgrid/mail');
 const { buildRegistrationTemplate } = require('./email-templates');
 
-const { BASE_EMAIL } = process.env;
+const {
+  SENDGRID_API_KEY,
+  BASE_EMAIL,
+} = process.env;
+
+sendgridMail.setApiKey(SENDGRID_API_KEY);
 
 class EmailRepository {
-
   /**
    * Sends an email for user registration with a link to activate the account.
    * @param {String} email target user email.
@@ -13,7 +17,7 @@ class EmailRepository {
    */
   static async sendRegistration(address, activationCode) {
     const msg = {
-      to: email,
+      to: address,
       from: {
         email: BASE_EMAIL,
         name: 'Auth Service Email',
@@ -22,7 +26,7 @@ class EmailRepository {
       text: 'Hello! Welcome to our platform!',
       html: buildRegistrationTemplate({ activationCode }),
     };
-  
+
     return sendgridMail.send(msg);
   }
 }
