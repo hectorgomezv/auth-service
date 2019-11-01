@@ -19,11 +19,26 @@ class UserRepository {
   }
 
   static async addSession(userId, session) {
-    return 'todo';
+    return users().findOneAndUpdate(
+      { _id: userId },
+      { $push: { sessions: session } },
+      { returnOriginal: false },
+    );
   }
 
   static async activate(userId, password) {
-    return 'todo';
+    const { value } = await users().findOneAndUpdate(
+      { _id: userId },
+      {
+        $set: {
+          active: true,
+          password,
+        },
+      },
+      { returnOriginal: false },
+    );
+
+    return value;
   }
 }
 
