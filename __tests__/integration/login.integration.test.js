@@ -1,4 +1,5 @@
 const faker = require('faker');
+const bcrypt = require('bcrypt');
 const { OK } = require('http-status-codes');
 const { MongoClient } = require('mongodb');
 const { MongoMemoryServer } = require('mongodb-memory-server');
@@ -37,7 +38,10 @@ async function setupDatabase() {
 
 async function setupData(db) {
   const col = db.collection('users');
-  await col.insertOne(USER);
+  await col.insertOne({
+    ...USER,
+    password: await bcrypt.hash(USER.password, 10),
+  });
   const count = await col.countDocuments({});
   expect(count).toBe(1);
 }
@@ -68,6 +72,17 @@ describe('[integration-tests] [login]', () => {
     });
 
     expect(res.statusCode).toBe(OK);
-    expect(JSON.parse(res.body)).toMatchObject({ data: USER });
+    expect(JSON.parse(res.body)).toMatchObject({
+      data: {
+        accessToken: expect.any(String),
+        refreshToken: expect.any(String),
+        expiresIn: expect.any(Number),
+        user: {
+          email: USER.email,
+          fullName: USER.fullName,
+          role: USER.role,
+        },
+      },
+    });
   });
 });

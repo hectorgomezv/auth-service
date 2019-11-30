@@ -18,6 +18,7 @@ module.exports = {
     'jest',
   ],
   rules: {
+    'arrow-parens': 'off',
     'no-underscore-dangle': 'off',
     'security/detect-object-injection': 'off',
     'jest/no-disabled-tests': 'warn',

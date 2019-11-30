@@ -18,7 +18,7 @@ const {
   USER_ALREADY_EXISTS,
 } = require('../../../../../app/domain/use-cases/user/error-messages');
 
-const ROLE = ROLES.ADMIN;
+const ROLE = ROLES.ADMIN.name;
 
 const USER = {
   email: faker.internet.email(),
@@ -54,7 +54,7 @@ describe('[use-cases-tests] [user] [create-user]', () => {
     try {
       await createUser({ role: ROLE }, {
         ...USER,
-        role: ROLES.SUPERADMIN,
+        role: ROLES.SUPERADMIN.name,
       });
       done.fail();
     } catch (err) {

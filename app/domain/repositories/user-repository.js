@@ -1,9 +1,14 @@
+const { ObjectId } = require('mongodb');
 const { db } = require('../../infrastructure/database/mongodb');
 
 const COLLECTION_NAME = 'users';
 const users = () => db().collection(COLLECTION_NAME);
 
 class UserRepository {
+  static async findById(id) {
+    return users().findOne({ _id: new ObjectId(id) });
+  }
+
   static async findByEmail(email) {
     return users().findOne({ email });
   }
