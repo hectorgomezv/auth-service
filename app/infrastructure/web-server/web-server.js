@@ -15,21 +15,23 @@ const { PORT } = process.env;
 const app = fastify({ logger: loggerConfig });
 const baseUrl = '/api/auth';
 
-const mountRouters = () => {
-  app.register(accountRouter, { prefix: `${baseUrl}/accounts` });
-  app.register(userRouter, { prefix: `${baseUrl}/users` });
+const mountRouters = (appInstance) => {
+  appInstance.register(accountRouter, { prefix: `${baseUrl}/accounts` });
+  appInstance.register(userRouter, { prefix: `${baseUrl}/users` });
 };
 
 const init = async (port = Number(PORT)) => {
   try {
-    mountRouters();
-    await app.listen(port);
+    mountRouters(app);
+    return app.listen(port);
   } catch (err) {
     logger.error(err);
-    process.exit(1);
+    return process.exit(1);
   }
 };
 
 module.exports = {
+  app,
   init,
+  mountRouters,
 };

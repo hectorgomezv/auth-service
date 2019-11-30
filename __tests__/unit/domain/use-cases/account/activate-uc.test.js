@@ -8,10 +8,10 @@ const {
 const {
   ACTIVATION_CODE_NOT_FOUND,
   ALREADY_ACTIVE_ERROR,
-} = require('../../../../app/domain/use-cases/account/error-messages');
+} = require('../../../../../app/domain/use-cases/account/error-messages');
 
-const { UserRepository } = require('../../../../app/domain/repositories');
-const { activate } = require('../../../../app/domain/use-cases/account');
+const { UserRepository } = require('../../../../../app/domain/repositories');
+const { activate } = require('../../../../../app/domain/use-cases/account');
 
 const ACTIVATION_CODE = faker.random.uuid();
 const PASSWORD = faker.random.alphaNumeric();
@@ -72,8 +72,10 @@ describe('[use-cases-tests] [account] [activate]', () => {
     expect(UserRepository.activate).toHaveBeenCalledTimes(1);
     expect(UserRepository.activate).toHaveBeenCalledWith(USER._id, expect.any(String));
     expect(result).toMatchObject({
-      ...USER,
-      active: true,
+      data: {
+        ...USER,
+        active: true,
+      },
     });
   });
 });

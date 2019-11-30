@@ -5,9 +5,10 @@ const { UNAUTHORIZED } = require('http-status-codes');
 const {
   BAD_LOGIN_ERROR,
   INACTIVE_USER_ERROR,
-} = require('../../../../app/domain/use-cases/account/error-messages');
-const { UserRepository } = require('../../../../app/domain/repositories');
-const { login } = require('../../../../app/domain/use-cases/account');
+} = require('../../../../../app/domain/use-cases/account/error-messages');
+
+const { UserRepository } = require('../../../../../app/domain/repositories');
+const { login } = require('../../../../../app/domain/use-cases/account');
 
 const EMAIL = faker.internet.email();
 

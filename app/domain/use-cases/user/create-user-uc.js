@@ -32,11 +32,11 @@ const { RbacEntity } = require('../../entities/rbac');
 const checkPermissions = async (auth, data) => {
   const { role } = data;
 
-  if (!Object.values(ROLES).includes(role)) {
+  if (!Object.values(ROLES).map(r => r.name).includes(role)) {
     throw new ForbiddenActionError(OPERATION_NOT_SUPPORTED);
   }
 
-  if (role === ROLES.SUPERADMIN) {
+  if (role === ROLES.SUPERADMIN.name) {
     throw new ForbiddenActionError(FORBIDDEN_SUPERADMIN_CREATION);
   }
 

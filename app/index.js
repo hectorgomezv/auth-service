@@ -12,7 +12,8 @@ const { RbacEntity } = require('./domain/entities/rbac');
   try {
     await database.connect();
     await RbacEntity.init();
-    await webServer.init();
+
+    return webServer.init();
   } catch (err) {
     logger.error(err);
   }

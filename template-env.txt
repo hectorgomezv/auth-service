@@ -7,7 +7,6 @@ SUPERADMIN_PASSWORD=superSecret
 PORT=4400
 BASE_URL=https://www.yourdomain.com
 AUTH_SERVICE_URL=https://www.yourdomain.com/api/auth
-BASE_EMAIL=your@email.com
 
 # DATABASES
 MONGO_CONNECTION_STRING=mongodb://localhost:27017/
