@@ -1,7 +1,6 @@
 const faker = require('faker');
 const bcrypt = require('bcrypt');
 const { OK } = require('http-status-codes');
-const { MongoClient } = require('mongodb');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 
 const {
