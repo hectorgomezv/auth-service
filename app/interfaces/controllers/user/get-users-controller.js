@@ -1,13 +1,12 @@
 const { jsonErrorAdapter } = require('../../adapters');
 const { profileAdapter } = require('../../adapters/user');
-const { getUser } = require('../../../domain/use-cases/user');
+const { getUsers } = require('../../../domain/use-cases/user');
 
 module.exports = async (req, res) => {
   try {
     const { auth } = req.raw;
-    const { id } = req.params;
-    const user = await getUser(id, auth);
-    res.send({ data: profileAdapter(user) });
+    const users = await getUsers(auth);
+    res.send({ data: users.map(u => profileAdapter(u)) });
   } catch (err) {
     throw jsonErrorAdapter(err);
   }

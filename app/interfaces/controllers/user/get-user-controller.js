@@ -6,7 +6,7 @@ module.exports = async (req, res) => {
   try {
     const { auth } = req.raw;
     const { id } = req.params;
-    const user = await getUser(id, auth);
+    const user = await getUser(auth, id);
     res.send({ data: profileAdapter(user) });
   } catch (err) {
     throw jsonErrorAdapter(err);

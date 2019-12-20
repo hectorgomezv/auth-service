@@ -35,8 +35,9 @@ describe('[use-cases-tests] [user] [create-user]', () => {
     EmailRepository.sendRegistration = jest.fn().mockResolvedValue();
   });
 
-  it('should fail if the executor has no permissions to create users', async (done) => {
+  it('should fail if the executor has no permissions', async (done) => {
     const expectedError = new AccessError(NOT_ALLOWED);
+
     RbacEntity.isUserAllowedTo = jest.fn(() => {
       throw expectedError;
     });
@@ -56,6 +57,7 @@ describe('[use-cases-tests] [user] [create-user]', () => {
         ...USER,
         role: ROLES.SUPERADMIN.name,
       });
+
       done.fail();
     } catch (err) {
       expect(err).toMatchObject({
@@ -72,6 +74,7 @@ describe('[use-cases-tests] [user] [create-user]', () => {
         ...USER,
         role: 'baker',
       });
+
       done.fail();
     } catch (err) {
       expect(err).toMatchObject({
@@ -90,6 +93,7 @@ describe('[use-cases-tests] [user] [create-user]', () => {
 
   it('should fail if the user already exists', async (done) => {
     UserRepository.findByEmail.mockResolvedValue(USER);
+
     try {
       await createUser({ role: ROLE }, USER);
       done.fail();
@@ -105,6 +109,7 @@ describe('[use-cases-tests] [user] [create-user]', () => {
   it('created users should be initially inactive', async () => {
     await createUser({ role: ROLE }, USER);
     expect(UserRepository.create).toHaveBeenCalledTimes(1);
+
     expect(UserRepository.create).toHaveBeenCalledWith({
       ...USER,
       password: expect.any(String),
@@ -118,6 +123,7 @@ describe('[use-cases-tests] [user] [create-user]', () => {
     it('should call EmailRepository with the address and the activationCode', async () => {
       await createUser({ role: ROLE }, USER);
       expect(EmailRepository.sendRegistration).toHaveBeenCalledTimes(1);
+
       expect(EmailRepository.sendRegistration)
         .toHaveBeenCalledWith(USER.email, expect.any(String));
     });
