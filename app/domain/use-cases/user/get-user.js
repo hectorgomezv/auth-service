@@ -8,7 +8,7 @@ const { UserRepository } = require('../../../../app/domain/repositories');
  * @param {Auth} auth auth info of the user who request the operation.
  */
 const execute = async (auth, id) => {
-  if (!auth.id.equals(id)) {
+  if (auth.id !== id) {
     await RbacEntity.isUserAllowedTo(auth, 'read', 'user');
   }
   const user = await UserRepository.findById(id);

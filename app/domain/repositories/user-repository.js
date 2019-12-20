@@ -5,6 +5,10 @@ const COLLECTION_NAME = 'users';
 const users = () => db().collection(COLLECTION_NAME);
 
 class UserRepository {
+  static async find() {
+    return users().find({}).toArray();
+  }
+
   static async findById(id) {
     return users().findOne({ _id: new ObjectId(id) });
   }
