@@ -1,3 +1,5 @@
+const _ = require('lodash');
+
 const { NotFoundError } = require('../errors');
 const { USER_NOT_FOUND } = require('./error-messages');
 const { RbacEntity } = require('../../entities/rbac');
@@ -5,11 +7,12 @@ const { UserRepository } = require('../../../../app/domain/repositories');
 
 /**
  * Get user by Id from the user repository.
- * @param {Auth} auth auth info of the user who request the operation.
+ * @param {Context} execution context.
  */
-const execute = async (auth, id) => {
-  if (auth.id !== id) {
-    await RbacEntity.isUserAllowedTo(auth, 'read', 'user');
+const execute = async (context, id) => {
+  const userId = _.get(context, 'auth.id');
+  if (userId !== id) {
+    await RbacEntity.isUserAllowedTo(context, 'read', 'user');
   }
   const user = await UserRepository.findById(id);
 
