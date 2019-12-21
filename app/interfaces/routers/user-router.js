@@ -1,4 +1,4 @@
-const { AuthEntity } = require('../entities');
+const { ContextEntity } = require('../entities');
 
 const {
   getUserController,
@@ -7,7 +7,7 @@ const {
 } = require('../controllers/user');
 
 module.exports = (app, opts, done) => {
-  app.use('/', AuthEntity.addAuthHeader);
+  app.use('/', ContextEntity.buildContext);
   app.post('/', createUserController);
   app.get('/', {}, getUsersController);
   app.get('/:id', {}, getUserController);

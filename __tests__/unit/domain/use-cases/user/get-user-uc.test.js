@@ -8,14 +8,19 @@ const { AccessError } = require('../../../../../app/domain/entities/errors');
 const { NOT_ALLOWED } = require('../../../../../app/domain/entities/rbac/error-messages');
 const { ROLES } = require('../../../../../app/domain/config/roles-config');
 
-const ROLE = ROLES.ADMIN.name;
-
 const USER = {
   _id: ObjectId(),
   email: faker.internet.email(),
   fullName: `${faker.name.firstName()} ${faker.name.lastName}`,
   avatarUrl: faker.internet.url(),
   role: 'user',
+};
+
+const CONTEXT = {
+  auth: {
+    id: USER._id,
+    role: ROLES.ADMIN.name,
+  },
 };
 
 describe('[use-cases-tests] [user] [get-user]', () => {
@@ -32,7 +37,7 @@ describe('[use-cases-tests] [user] [get-user]', () => {
     });
 
     try {
-      await getUser({ id: ObjectId(), role: ROLE }, USER._id);
+      await getUser({ ...CONTEXT, auth: { ...CONTEXT.auth, id: ObjectId() } }, USER._id);
       done.fail();
     } catch (err) {
       expect(err).toEqual(expectedError);
@@ -47,12 +52,12 @@ describe('[use-cases-tests] [user] [get-user]', () => {
       throw expectedError;
     });
 
-    const user = await getUser({ id: USER._id, role: ROLE }, USER._id);
+    const user = await getUser(CONTEXT, USER._id);
     expect(user).toEqual(USER);
   });
 
   it('should return the profile when the role allows to', async () => {
-    const user = await getUser({ id: ObjectId(), role: ROLE }, USER._id);
+    const user = await getUser({ ...CONTEXT, auth: { ...CONTEXT.auth, id: ObjectId() } }, USER._id);
     expect(user).toEqual(USER);
   });
 });

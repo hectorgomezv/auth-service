@@ -26,10 +26,10 @@ const { RbacEntity } = require('../../entities/rbac');
 
 /**
  * Check the permissions to create a new user.
- * @param {Auth} auth auth info of the user who request the operation.
+ * @param {Context} execution context.
  * @param {Object} data data of the user to create.
  */
-const checkPermissions = async (auth, data) => {
+const checkPermissions = async (context, data) => {
   const { role } = data;
 
   if (!Object.values(ROLES).map(r => r.name).includes(role)) {
@@ -40,7 +40,7 @@ const checkPermissions = async (auth, data) => {
     throw new ForbiddenActionError(FORBIDDEN_SUPERADMIN_CREATION);
   }
 
-  return RbacEntity.isUserAllowedTo(auth, 'create', role);
+  return RbacEntity.isUserAllowedTo(context, 'create', role);
 };
 
 /**

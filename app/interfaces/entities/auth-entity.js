@@ -48,23 +48,6 @@ const processAuth = (headers) => {
   }
 };
 
-/**
- * Adds auth object with user credentials to the request object.
- * @param {Object} req request object.
- * @param {Object} res response object.
- * @param {Function} next next function in the pipeline.
- */
-const addAuthHeader = (req, res, next) => {
-  try {
-    const { headers } = req;
-    req.auth = processAuth(headers);
-  } catch (err) {
-    return next(err);
-  }
-
-  return next();
-};
-
 module.exports = {
-  addAuthHeader,
+  processAuth,
 };

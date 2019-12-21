@@ -18,7 +18,11 @@ const {
   USER_ALREADY_EXISTS,
 } = require('../../../../../app/domain/use-cases/user/error-messages');
 
-const ROLE = ROLES.ADMIN.name;
+const CONTEXT = {
+  auth: {
+    role: ROLES.ADMIN.name,
+  },
+};
 
 const USER = {
   email: faker.internet.email(),
@@ -43,7 +47,7 @@ describe('[use-cases-tests] [user] [create-user]', () => {
     });
 
     try {
-      await createUser({ role: ROLE }, USER);
+      await createUser(CONTEXT, USER);
       done.fail();
     } catch (err) {
       expect(err).toEqual(expectedError);
@@ -53,7 +57,7 @@ describe('[use-cases-tests] [user] [create-user]', () => {
 
   it('should fail if someone tries to create a superAdmin', async (done) => {
     try {
-      await createUser({ role: ROLE }, {
+      await createUser(CONTEXT, {
         ...USER,
         role: ROLES.SUPERADMIN.name,
       });
@@ -70,7 +74,7 @@ describe('[use-cases-tests] [user] [create-user]', () => {
 
   it("should fail if the input role isn't recognized", async (done) => {
     try {
-      await createUser({ role: ROLE }, {
+      await createUser(CONTEXT, {
         ...USER,
         role: 'baker',
       });
@@ -86,16 +90,16 @@ describe('[use-cases-tests] [user] [create-user]', () => {
   });
 
   it('should call RbacEntity with the proper params', async () => {
-    await createUser({ role: ROLE }, USER);
+    await createUser(CONTEXT, USER);
     expect(RbacEntity.isUserAllowedTo).toHaveBeenCalledTimes(1);
-    expect(RbacEntity.isUserAllowedTo).toHaveBeenCalledWith({ role: ROLE }, 'create', USER.role);
+    expect(RbacEntity.isUserAllowedTo).toHaveBeenCalledWith(CONTEXT, 'create', USER.role);
   });
 
   it('should fail if the user already exists', async (done) => {
     UserRepository.findByEmail.mockResolvedValue(USER);
 
     try {
-      await createUser({ role: ROLE }, USER);
+      await createUser(CONTEXT, USER);
       done.fail();
     } catch (err) {
       expect(err).toMatchObject({
@@ -107,7 +111,7 @@ describe('[use-cases-tests] [user] [create-user]', () => {
   });
 
   it('created users should be initially inactive', async () => {
-    await createUser({ role: ROLE }, USER);
+    await createUser(CONTEXT, USER);
     expect(UserRepository.create).toHaveBeenCalledTimes(1);
 
     expect(UserRepository.create).toHaveBeenCalledWith({
@@ -121,7 +125,7 @@ describe('[use-cases-tests] [user] [create-user]', () => {
 
   describe('Email notifications', () => {
     it('should call EmailRepository with the address and the activationCode', async () => {
-      await createUser({ role: ROLE }, USER);
+      await createUser(CONTEXT, USER);
       expect(EmailRepository.sendRegistration).toHaveBeenCalledTimes(1);
 
       expect(EmailRepository.sendRegistration)
