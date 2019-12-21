@@ -24,6 +24,12 @@ const USER = {
   role: faker.random.word(),
 };
 
+const DATA = {
+  activationCode: ACTIVATION_CODE,
+  password: PASSWORD,
+  repeatedPassword: PASSWORD,
+};
+
 describe('[use-cases-tests] [account] [activate]', () => {
   beforeEach(() => {
     UserRepository.findByActivationCode = jest.fn().mockResolvedValue(USER);
@@ -36,7 +42,7 @@ describe('[use-cases-tests] [account] [activate]', () => {
   it('should fail if the repository can find the activation code', async (done) => {
     try {
       UserRepository.findByActivationCode = jest.fn(() => null);
-      await activate(ACTIVATION_CODE, PASSWORD, PASSWORD);
+      await activate(DATA);
       done.fail();
     } catch (err) {
       expect(err).toMatchObject({
@@ -55,7 +61,7 @@ describe('[use-cases-tests] [account] [activate]', () => {
         active: true,
       });
 
-      await activate(ACTIVATION_CODE, PASSWORD, PASSWORD);
+      await activate(DATA);
       done.fail();
     } catch (err) {
       expect(err).toMatchObject({
@@ -68,7 +74,7 @@ describe('[use-cases-tests] [account] [activate]', () => {
   });
 
   it('should activate the account', async () => {
-    const result = await activate(ACTIVATION_CODE, PASSWORD, PASSWORD);
+    const result = await activate(DATA);
     expect(UserRepository.activate).toHaveBeenCalledTimes(1);
     expect(UserRepository.activate).toHaveBeenCalledWith(USER._id, expect.any(String));
     expect(result).toMatchObject({

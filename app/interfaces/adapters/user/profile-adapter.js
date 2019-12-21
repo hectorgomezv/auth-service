@@ -10,4 +10,5 @@ module.exports = (user) => _.pick(user, [
   'email',
   'fullName',
   'role',
+  'activationCode',
 ]);
