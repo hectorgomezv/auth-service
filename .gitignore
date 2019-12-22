@@ -1,4 +1,5 @@
 node_modules
+docker.env
 .env
 test.env
 __tests__/coverage/*

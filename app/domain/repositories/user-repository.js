@@ -49,6 +49,20 @@ class UserRepository {
 
     return value;
   }
+
+  static async deactivate(id) {
+    const { value } = await users().findOneAndUpdate(
+      { _id: ObjectId(id) },
+      {
+        $set: {
+          active: false,
+        },
+      },
+      { returnOriginal: false },
+    );
+
+    return value;
+  }
 }
 
 module.exports = UserRepository;

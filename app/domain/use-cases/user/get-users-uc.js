@@ -1,5 +1,5 @@
 const { RbacEntity } = require('../../entities/rbac');
-const { UserRepository } = require('../../../../app/domain/repositories');
+const { UserRepository } = require('../../repositories');
 
 /**
  * Get user by Id from the user repository.

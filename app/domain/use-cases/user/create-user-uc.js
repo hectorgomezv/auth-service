@@ -73,12 +73,12 @@ const buildUser = async (data) => {
 
 /**
  * Creates a new user.
- * @param {Auth} auth auth info of the user who request the operation.
+ * @param {Context} execution context.
  * @param {Object} data data to fill the new user profile.
  */
-const execute = async (auth, data) => {
+const execute = async (context, data) => {
   await userValidator(data);
-  await checkPermissions(auth, data);
+  await checkPermissions(context, data);
 
   const user = await UserRepository.findByEmail(data.email);
 
