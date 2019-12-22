@@ -51,7 +51,17 @@ class UserRepository {
   }
 
   static async deactivate(id) {
-    return id;
+    const { value } = await users().findOneAndUpdate(
+      { _id: ObjectId(id) },
+      {
+        $set: {
+          active: false,
+        },
+      },
+      { returnOriginal: false },
+    );
+
+    return value;
   }
 }
 
