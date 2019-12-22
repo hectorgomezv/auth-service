@@ -1,6 +1,6 @@
 const baseTemplate = require('./base-template');
 
-const { AUTH_SERVICE_URL } = process.env;
+const { BASE_URL } = process.env;
 
 function buildRegistrationTemplate({
   title = 'Confirm Registration',
@@ -8,7 +8,7 @@ function buildRegistrationTemplate({
 }) {
   const data = {
     title,
-    actionUrl: `${AUTH_SERVICE_URL}/activate?activationCode=${activationCode}`,
+    actionUrl: `${BASE_URL}:accounts/activate?activationCode=${activationCode}`,
   };
 
   return baseTemplate(data);

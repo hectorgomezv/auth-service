@@ -1,0 +1,32 @@
+version: '3'
+services:
+
+  nginx: 
+    build: ./ci/nginx
+    ports:
+      - "80:80"
+    links:
+      - auth-service
+    depends_on:
+      - auth-service
+
+  auth-service:
+    build: .
+    env_file:
+      - ./docker.env
+    ports:
+    - "7000:7000"
+    links:
+      - mongo
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:

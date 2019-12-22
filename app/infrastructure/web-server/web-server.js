@@ -23,7 +23,7 @@ const mountRouters = (appInstance) => {
 const init = async (port = Number(PORT)) => {
   try {
     mountRouters(app);
-    return app.listen(port);
+    return app.listen(port, '0.0.0.0');
   } catch (err) {
     logger.error(err);
     return process.exit(1);

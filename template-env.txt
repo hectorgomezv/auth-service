@@ -4,9 +4,8 @@ SUPERADMIN_EMAIL=superadmin@email.com
 SUPERADMIN_PASSWORD=superSecret
 
 # WEB
-PORT=4400
+PORT=80
 BASE_URL=https://www.yourdomain.com
-AUTH_SERVICE_URL=https://www.yourdomain.com/api/auth
 
 # DATABASES
 MONGO_CONNECTION_STRING=mongodb://localhost:27017/

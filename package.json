@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "./node_modules/.bin/nodemon ./app",
     "test": "jest -i --watch",
-    "test:coverage": "jest -i --collectCoverage --forceExit"
+    "test:coverage": "jest -i --collectCoverage --forceExit",
+    "start": "node ./app"
   },
   "keywords": [],
   "author": "",

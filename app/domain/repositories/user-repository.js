@@ -49,6 +49,10 @@ class UserRepository {
 
     return value;
   }
+
+  static async deactivate(id) {
+    return id;
+  }
 }
 
 module.exports = UserRepository;
