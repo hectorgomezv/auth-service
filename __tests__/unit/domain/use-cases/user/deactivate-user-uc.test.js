@@ -9,7 +9,7 @@ const { RbacEntity } = require('../../../../../app/domain/entities/rbac');
 const { AccessError } = require('../../../../../app/domain/entities/errors');
 
 const USER = {
-  _id: ObjectId(),
+  _id: ObjectId().toString(),
   email: faker.internet.email(),
   fullName: `${faker.name.firstName()} ${faker.name.lastName}`,
   avatarUrl: faker.internet.url(),
@@ -18,7 +18,7 @@ const USER = {
 
 const CONTEXT = {
   auth: {
-    id: ObjectId(),
+    id: ObjectId().toString(),
     role: ROLES.ADMIN.name,
   },
 };

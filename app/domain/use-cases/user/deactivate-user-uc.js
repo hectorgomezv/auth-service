@@ -31,7 +31,7 @@ const checkPermissions = async (context, user) => {
 const execute = async (context, id) => {
   const userId = _.get(context, 'auth.id');
 
-  if (userId.equals(id)) {
+  if (userId === id) {
     throw new ConflictError('Self-deactivation is not allowed');
   }
 
