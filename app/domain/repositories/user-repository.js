@@ -43,6 +43,9 @@ class UserRepository {
           active: true,
           password,
         },
+        $unset: {
+          activationCode: true,
+        },
       },
       { returnOriginal: false },
     );

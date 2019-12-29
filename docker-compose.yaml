@@ -15,7 +15,7 @@ services:
     env_file:
       - ./docker.env
     ports:
-    - "7000:7000"
+    - "4400:4400"
     links:
       - mongo
     depends_on:
