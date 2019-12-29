@@ -5,6 +5,7 @@ const {
   getUsersController,
   createUserController,
   deactivateUserController,
+  activationController,
 } = require('../controllers/user');
 
 module.exports = (app, opts, done) => {
@@ -13,5 +14,6 @@ module.exports = (app, opts, done) => {
   app.get('/', {}, getUsersController);
   app.get('/:id', {}, getUserController);
   app.delete('/:id', {}, deactivateUserController);
+  app.post('/activation/:id', {}, activationController);
   done();
 };
