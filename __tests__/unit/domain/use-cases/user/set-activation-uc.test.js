@@ -81,6 +81,6 @@ describe('[use-cases-tests] [user] [set-activation]', () => {
   it('should call repository to (de)activate the user', async () => {
     await setActivation(CONTEXT, USER._id, PATCH);
     expect(UserRepository.setActivationState).toHaveBeenCalledTimes(1);
-    expect(UserRepository.setActivationState).toHaveBeenCalledWith(USER._id, PATCH);
+    expect(UserRepository.setActivationState).toHaveBeenCalledWith(USER._id, PATCH.active);
   });
 });

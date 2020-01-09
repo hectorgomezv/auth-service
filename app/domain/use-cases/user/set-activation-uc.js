@@ -50,7 +50,7 @@ const execute = async (context, id, patch) => {
 
   await checkPermissions(context, user);
 
-  return UserRepository.setActivationState(id, patch);
+  return UserRepository.setActivationState(id, patch.active);
 };
 
 module.exports = execute;
