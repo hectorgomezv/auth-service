@@ -35,7 +35,7 @@ const checkPermissions = async (context, user) => {
  * @param {Object} patch patch to apply.
  */
 const execute = async (context, id, patch) => {
-  await patchSchema.validate(patch);
+  await patchSchema.validateAsync(patch);
   const userId = _.get(context, 'auth.id');
 
   if (userId === id) {
