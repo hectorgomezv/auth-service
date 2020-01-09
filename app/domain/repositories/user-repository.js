@@ -43,6 +43,9 @@ class UserRepository {
           active: true,
           password,
         },
+        $unset: {
+          activationCode: true,
+        },
       },
       { returnOriginal: false },
     );
@@ -50,14 +53,15 @@ class UserRepository {
     return value;
   }
 
-  static async deactivate(id) {
+  /**
+   * Sets the activation state of the user pointed by the id.
+   * @param {String} id id of the user to modify.
+   * @param {Boolean} active true if the user is set to active.
+   */
+  static async setActivationState(id, active) {
     const { value } = await users().findOneAndUpdate(
       { _id: ObjectId(id) },
-      {
-        $set: {
-          active: false,
-        },
-      },
+      { $set: { active } },
       { returnOriginal: false },
     );
 
