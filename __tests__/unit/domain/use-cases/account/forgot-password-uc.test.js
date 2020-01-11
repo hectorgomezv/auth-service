@@ -12,6 +12,10 @@ const { USER_NOT_FOUND, INACTIVE_USER_ERROR } = require('../../../../../app/doma
 const EMAIL = faker.internet.email();
 const ID = faker.random.alphaNumeric();
 
+const DATA = {
+  email: EMAIL,
+};
+
 const USER = {
   _id: ID,
   email: EMAIL,
@@ -25,11 +29,12 @@ describe('[use-cases-tests] [account] [forgot-password]', () => {
   beforeEach(() => {
     UserRepository.findByEmail = jest.fn().mockResolvedValue(USER);
     UserRepository.generateResetPasswordCode = jest.fn().mockResolvedValue(USER);
+    EmailRepository.sendResetPassword = jest.fn();
   });
 
   it('should fail if the repository can find the user email', async () => {
     UserRepository.findByEmail = jest.fn(() => null);
-    await expect(forgotPassword(EMAIL)).rejects.toMatchObject({
+    await expect(forgotPassword(DATA)).rejects.toMatchObject({
       code: NOT_FOUND,
       name: 'NotFoundError',
       message: USER_NOT_FOUND,
@@ -38,7 +43,7 @@ describe('[use-cases-tests] [account] [forgot-password]', () => {
 
   it('should fail if the found user is not active', async () => {
     UserRepository.findByEmail.mockResolvedValue({ ...USER, active: false });
-    await expect(forgotPassword(EMAIL)).rejects.toMatchObject({
+    await expect(forgotPassword(DATA)).rejects.toMatchObject({
       code: UNAUTHORIZED,
       name: 'ActivationError',
       message: INACTIVE_USER_ERROR,
@@ -47,9 +52,16 @@ describe('[use-cases-tests] [account] [forgot-password]', () => {
   });
 
   it('should call repository to store the user with resetPasswordCode', async () => {
-    await forgotPassword(EMAIL);
+    await forgotPassword(DATA);
     expect(UserRepository.generateResetPasswordCode).toHaveBeenCalledTimes(1);
     expect(UserRepository.generateResetPasswordCode)
       .toHaveBeenCalledWith(ID, expect.any(String), expect.any(Number));
+  });
+
+  it('should call EmailRepository to send a resetPassword email', async () => {
+    await forgotPassword(DATA);
+    expect(EmailRepository.sendResetPassword).toHaveBeenCalledTimes(1);
+    expect(EmailRepository.sendResetPassword)
+      .toHaveBeenCalledWith(EMAIL, expect.any(String));
   });
 });

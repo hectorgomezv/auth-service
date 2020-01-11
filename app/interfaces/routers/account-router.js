@@ -1,11 +1,13 @@
 const {
-  loginController,
   activateController,
+  forgotPasswordController,
+  loginController,
 } = require('../controllers/account');
 
-module.exports = (app, opts, done) => {
-  app.post('/login', loginController);
+module.exports = (app, _, done) => {
   app.post('/activate', activateController);
+  app.post('/forgot-password', forgotPasswordController);
+  app.post('/login', loginController);
 
   done();
 };
