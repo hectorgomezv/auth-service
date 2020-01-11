@@ -1,7 +1,11 @@
 const sendgridMail = require('@sendgrid/mail');
 
+const {
+  buildRegistrationTemplate,
+  buildResetPasswordTemplate,
+} = require('./email-templates');
+
 const { EmailError } = require('./errors');
-const { buildRegistrationTemplate } = require('./email-templates');
 const { logger } = require('../../infrastructure/logger');
 
 const {
@@ -30,12 +34,41 @@ class EmailRepository {
         text: 'Hello! Welcome to our platform!',
         html: buildRegistrationTemplate({ activationCode }),
       };
-  
       await sendgridMail.send(msg);
     } catch (err) {
       logger.error(err);
       throw new EmailError(
         'Error sending registration email.',
+        `address:${address}`,
+        null,
+        err.message,
+      );
+    }
+  }
+
+  /**
+ * Sends an email for a user who forgot its password. Includes a resetPasswordCode.
+ * @param {String} email target user email.
+ * @returns {Promise} resolved to true if the email was sent.
+ * @throws EmailError if the email could not be sent.
+ */
+  static async sendResetPassword(address, resetPasswordCode) {
+    try {
+      const msg = {
+        to: address,
+        from: {
+          email: BASE_EMAIL,
+          name: 'Auth Service Email',
+        },
+        subject: 'Reset your password',
+        text: 'Please click in the link below to reset your password',
+        html: buildResetPasswordTemplate({ resetPasswordCode }),
+      };
+      await sendgridMail.send(msg);
+    } catch (err) {
+      logger.error(err);
+      throw new EmailError(
+        'Error sending reset password email.',
         `address:${address}`,
         null,
         err.message,

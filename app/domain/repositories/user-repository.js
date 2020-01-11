@@ -35,6 +35,19 @@ class UserRepository {
     );
   }
 
+  static async generateResetPasswordCode(userId, resetPasswordCode, expiration) {
+    return users().findOneAndUpdate(
+      { _id: userId },
+      {
+        $set: {
+          resetPasswordCode,
+          resetPasswordExpiration: expiration,
+        },
+      },
+      { returnOriginal: false },
+    );
+  }
+
   static async activate(userId, password) {
     const { value } = await users().findOneAndUpdate(
       { _id: userId },
