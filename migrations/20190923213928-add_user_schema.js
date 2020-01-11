@@ -10,24 +10,15 @@ const up = async (db) => db.createCollection(USERS_COLLECTION, {
           bsonType: 'string',
           pattern: '^.+@.+$',
         },
-        password: {
-          bsonType: 'string',
-        },
-        avatarUrl: {
-          bsonType: 'string',
-        },
-        fullName: {
-          bsonType: 'string',
-        },
-        role: {
-          bsonType: 'string',
-        },
-        active: {
-          bsonType: 'bool',
-        },
-        activationCode: {
-          bsonType: 'string',
-        },
+        password: { bsonType: 'string' },
+        avatarUrl: { bsonType: 'string' },
+        fullName: { bsonType: 'string' },
+        role: { bsonType: 'string' },
+        active: { bsonType: 'bool' },
+        activationCode: { bsonType: 'string' },
+        activationCodeExpiration: { bsonType: 'date' },
+        resetPasswordCode: { bsonType: 'string' },
+        resetPasswordExpiration: { bsonType: 'date' },
         sessions: {
           bsonType: ['array'],
           items: {
