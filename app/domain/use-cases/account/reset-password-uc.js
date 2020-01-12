@@ -29,7 +29,7 @@ module.exports = async (data) => {
     throw new ActivationError(INACTIVE_USER_ERROR, `email:${user.email}`, UNAUTHORIZED);
   }
 
-  const expiration = user.resetPasswordCodeExpiration.getTime();
+  const expiration = user.resetPasswordExpiration.getTime();
 
   if (expiration < Date.now()) {
     throw new ForbiddenActionError(EXPIRED_RESET_PASSWORD_CODE);

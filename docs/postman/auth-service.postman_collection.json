@@ -9,6 +9,117 @@
 			"name": "accounts",
 			"item": [
 				{
+					"name": "activateAccount",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f299ff99-8d90-4ef6-bafd-508de03201fd",
+								"exec": [
+									"pm.test(\"OK\", function () {",
+									"    const { data } = pm.response.json();",
+									"    pm.environment.set(\"accessToken\", data.accessToken);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"data\": {\n\t\t\"activationCode\": \"{{activationCode}}\",\n\t\t\"password\": \"{{userPassword}}\",\n\t\t\"repeatedPassword\": \"{{userPassword}}\"\n\t}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/accounts/activate",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"accounts",
+								"activate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "forgotPassword",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"data\": {\n\t\t\"email\": \"hector.gomez.varela@gmail.com\"\n\t}\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/accounts/forgot-password",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"accounts",
+								"forgot-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "resetPassword",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"data\": {\n\t\t\"resetPasswordCode\": \"resetPasswordCode\",\n\t\t\"password\": \"newPassword\",\n\t\t\"repeatedPassword\": \"newPassword\"\n\t}\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/accounts/reset-password",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"accounts",
+								"reset-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "login",
 					"event": [
 						{
@@ -66,7 +177,74 @@
 			"name": "users",
 			"item": [
 				{
+					"name": "find",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findOne",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/users/5db48daecb85e63367eca6b0",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"users",
+								"5db48daecb85e63367eca6b0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "35c084d3-4521-412b-ab0c-943c5385aafa",
+								"exec": [
+									"pm.test(\"OK\", function () {",
+									"    const { data } = pm.response.json();",
+									"    pm.environment.set(\"userId\", data._id);",
+									"    pm.environment.set(\"activationCode\", data.activationCode);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -84,7 +262,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"data\": {\n\t\t\"email\": \"user1@test.com\",\n\t\t\"fullName\": \"Test user\",\n\t\t\"role\": \"user\"\n\t}\n}",
+							"raw": "{\n\t\"data\": {\n\t\t\"email\": \"dusseldorfvampire@gmail.com\",\n\t\t\"fullName\": \"Test user\",\n\t\t\"role\": \"user\"\n\t}\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -100,6 +278,60 @@
 								"api",
 								"auth",
 								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "setActivation",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f299ff99-8d90-4ef6-bafd-508de03201fd",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"data\": {\n\t\t\"active\": false\n\t}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/users/activation/5dff9fab42d5f00013046b00",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"users",
+								"activation",
+								"5dff9fab42d5f00013046b00"
 							]
 						}
 					},
