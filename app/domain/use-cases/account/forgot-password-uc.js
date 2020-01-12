@@ -1,5 +1,5 @@
 const uuidV4 = require('uuid/v4');
-const { NOT_FOUND, UNAUTHORIZED } = require('http-status-codes');
+const { UNAUTHORIZED } = require('http-status-codes');
 
 const {
   USER_NOT_FOUND,
@@ -36,13 +36,12 @@ const checkUser = async (email) => {
   return user;
 };
 
-module.exports = async (email) => {
+module.exports = async (data) => {
+  const { email } = data;
   await emailValidator(email);
   const user = await checkUser(email);
-  const expiration = Number(Date.now() + RESET_PASSWORD_CODE_EXPIRATION);
-  const updated = await UserRepository.generateResetPasswordCode(user._id, uuidV4(), expiration);
-
-  // TODO: emailRepository.sendResetPassword
-
-  return updated;
+  const resetPasswordCode = uuidV4();
+  const expiration = new Date(Date.now() + Number(RESET_PASSWORD_CODE_EXPIRATION));
+  await UserRepository.generateResetPasswordCode(user._id, resetPasswordCode, expiration);
+  await EmailRepository.sendResetPassword(email, resetPasswordCode);
 };

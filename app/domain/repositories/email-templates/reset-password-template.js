@@ -8,7 +8,7 @@ function buildResetPasswordTemplate({
 }) {
   const data = {
     title,
-    actionUrl: `${BASE_URL}:accounts/reset-password?resetPasswordCode=${resetPasswordCode}`,
+    actionUrl: `${BASE_URL}/accounts/reset-password?resetPasswordCode=${resetPasswordCode}`,
   };
 
   return baseTemplate(data);
