@@ -41,12 +41,7 @@ module.exports = async (data) => {
   await emailValidator(email);
   const user = await checkUser(email);
   const resetPasswordCode = uuidV4();
-  const expiration = Number(Date.now() + RESET_PASSWORD_CODE_EXPIRATION);
-
-  const updated = await UserRepository
-    .generateResetPasswordCode(user._id, resetPasswordCode, expiration);
-
+  const expiration = new Date(Date.now() + Number(RESET_PASSWORD_CODE_EXPIRATION));
+  await UserRepository.generateResetPasswordCode(user._id, resetPasswordCode, expiration);
   await EmailRepository.sendResetPassword(email, resetPasswordCode);
-
-  return updated;
 };
