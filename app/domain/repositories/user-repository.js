@@ -84,6 +84,22 @@ class UserRepository {
 
     return value;
   }
+
+  /**
+   * Sets the new password for the user pointed by the id.
+   * @param {String} id id of the user.
+   * @param {String} password hashed password.
+   * @returns {User} modified user.
+   */
+  static async applyResetPassword(id, password) {
+    const { value } = await users().findOneAndUpdate(
+      { _id: ObjectId(id) },
+      { $set: { password } },
+      { returnOriginal: false },
+    );
+
+    return value;
+  }
 }
 
 module.exports = UserRepository;

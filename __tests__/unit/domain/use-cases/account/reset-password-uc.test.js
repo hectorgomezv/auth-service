@@ -29,7 +29,7 @@ const USER = {
   active: true,
   role: faker.random.word(),
   resetPasswordCode: faker.random.uuid(),
-  resetPasswordCodeExpiration: new Date(Date.now() + Number(RESET_PASSWORD_CODE_EXPIRATION)),
+  resetPasswordExpiration: new Date(Date.now() + Number(RESET_PASSWORD_CODE_EXPIRATION)),
 };
 
 describe('[use-cases-tests] [account] [reset-password]', () => {
@@ -39,7 +39,7 @@ describe('[use-cases-tests] [account] [reset-password]', () => {
       ...USER,
       password: PASSWORD,
       resetPasswordCode: null,
-      resetPasswordCodeExpiration: Date.now(),
+      resetPasswordExpiration: Date.now(),
     });
   });
 
@@ -73,7 +73,7 @@ describe('[use-cases-tests] [account] [reset-password]', () => {
   it('should fail if the reset password code is expired', async () => {
     UserRepository.findByResetPasswordCode.mockResolvedValue({
       ...USER,
-      resetPasswordCodeExpiration: new Date(Date.now() - 1),
+      resetPasswordExpiration: new Date(Date.now() - 1),
     });
 
     await expect(resetPassword(DATA)).rejects.toMatchObject({

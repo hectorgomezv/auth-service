@@ -27,7 +27,7 @@ const USER = {
   avatarUrl: faker.internet.url(),
   active: true,
   role: faker.random.word(),
-  resetPasswordCodeExpiration: new Date(Date.now() + 60000),
+  resetPasswordExpiration: new Date(Date.now() + 60000),
 };
 
 describe('[use-cases-tests] [account] [forgot-password]', () => {
