@@ -7,7 +7,11 @@ const {
 } = require('../../../../../app/domain/repositories');
 
 const { forgotPassword } = require('../../../../../app/domain/use-cases/account');
-const { USER_NOT_FOUND, INACTIVE_USER_ERROR } = require('../../../../../app/domain/use-cases/account/error-messages');
+
+const {
+  INACTIVE_USER_ERROR,
+  USER_NOT_FOUND,
+} = require('../../../../../app/domain/use-cases/account/error-messages');
 
 const EMAIL = faker.internet.email();
 const ID = faker.random.alphaNumeric();
@@ -23,6 +27,7 @@ const USER = {
   avatarUrl: faker.internet.url(),
   active: true,
   role: faker.random.word(),
+  resetPasswordCodeExpiration: new Date(Date.now() + 60000),
 };
 
 describe('[use-cases-tests] [account] [forgot-password]', () => {
@@ -55,7 +60,7 @@ describe('[use-cases-tests] [account] [forgot-password]', () => {
     await forgotPassword(DATA);
     expect(UserRepository.generateResetPasswordCode).toHaveBeenCalledTimes(1);
     expect(UserRepository.generateResetPasswordCode)
-      .toHaveBeenCalledWith(ID, expect.any(String), expect.any(Number));
+      .toHaveBeenCalledWith(ID, expect.any(String), expect.any(Date));
   });
 
   it('should call EmailRepository to send a resetPassword email', async () => {

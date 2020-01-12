@@ -21,6 +21,10 @@ class UserRepository {
     return users().findOne({ activationCode });
   }
 
+  static async findByResetPasswordCode(resetPasswordCode) {
+    return users().findOne({ resetPasswordCode });
+  }
+
   static async create(user) {
     const { ops: [item] } = await users().insertOne(user);
 

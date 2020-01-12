@@ -1,12 +1,13 @@
 const faker = require('faker');
-const { NOT_FOUND, UNAUTHORIZED, BAD_REQUEST } = require('http-status-codes');
+const { FORBIDDEN, NOT_FOUND, UNAUTHORIZED } = require('http-status-codes');
 
 const { UserRepository } = require('../../../../../app/domain/repositories');
 const { resetPassword } = require('../../../../../app/domain/use-cases/account');
 
 const {
-  RESET_PASSWORD_CODE_NOT_FOUND,
+  EXPIRED_RESET_PASSWORD_CODE,
   INACTIVE_USER_ERROR,
+  RESET_PASSWORD_CODE_NOT_FOUND,
 } = require('../../../../../app/domain/use-cases/account/error-messages');
 
 const { RESET_PASSWORD_CODE_EXPIRATION } = process.env;
@@ -32,7 +33,7 @@ const USER = {
 };
 
 describe('[use-cases-tests] [account] [reset-password]', () => {
-  beforeAll(() => {
+  beforeEach(() => {
     UserRepository.findByResetPasswordCode = jest.fn().mockResolvedValue(USER);
     UserRepository.applyResetPassword = jest.fn().mockResolvedValue({
       ...USER,
@@ -43,13 +44,13 @@ describe('[use-cases-tests] [account] [reset-password]', () => {
   });
 
   it('should fail if the password is not repeated', async () => {
-    await expect(resetPassword(DATA)).rejects.toMatchObject({
-      code: BAD_REQUEST,
-      name: 'ValidationError',
-    });
+    await expect(resetPassword({
+      ...DATA,
+      repeatedPassword: faker.random.alphaNumeric(),
+    })).rejects.toThrow();
   });
 
-  it('should fail if the repository can find the reset password code', async () => {
+  it('should fail if the repository cannot find the reset password code', async () => {
     UserRepository.findByResetPasswordCode = jest.fn(() => null);
     await expect(resetPassword(DATA)).rejects.toMatchObject({
       code: NOT_FOUND,
@@ -59,16 +60,30 @@ describe('[use-cases-tests] [account] [reset-password]', () => {
   });
 
   it('should fail if the found user is not active', async () => {
-    UserRepository.findByEmail.mockResolvedValue({ ...USER, active: false });
+    UserRepository.findByResetPasswordCode.mockResolvedValue({ ...USER, active: false });
     await expect(resetPassword(DATA)).rejects.toMatchObject({
       code: UNAUTHORIZED,
       name: 'ActivationError',
       message: INACTIVE_USER_ERROR,
-      pointer: `email:${EMAIL}`,
+      pointer: `email:${USER.email}`,
     });
   });
 
-  it('should call repository to store the user with resetPasswordCode', async () => {
+
+  it('should fail if the reset password code is expired', async () => {
+    UserRepository.findByResetPasswordCode.mockResolvedValue({
+      ...USER,
+      resetPasswordCodeExpiration: new Date(Date.now() - 1),
+    });
+
+    await expect(resetPassword(DATA)).rejects.toMatchObject({
+      code: FORBIDDEN,
+      name: 'ForbiddenActionError',
+      message: EXPIRED_RESET_PASSWORD_CODE,
+    });
+  });
+
+  it('should call repository to apply the reset', async () => {
     await resetPassword(DATA);
     expect(UserRepository.applyResetPassword).toHaveBeenCalledTimes(1);
     expect(UserRepository.applyResetPassword)
