@@ -29,20 +29,22 @@ describe('[use-cases-tests] [user] [get-user]', () => {
     UserRepository.findById = jest.fn().mockResolvedValue(USER);
   });
 
-  it('should fail if the executor has no permissions', async (done) => {
+  it('should fail if the executor has no permissions', async () => {
     const expectedError = new AccessError(NOT_ALLOWED);
 
     RbacEntity.isUserAllowedTo = jest.fn(() => {
       throw expectedError;
     });
 
-    try {
-      await getUser({ ...CONTEXT, auth: { ...CONTEXT.auth, id: ObjectId() } }, USER._id);
-      done.fail();
-    } catch (err) {
-      expect(err).toEqual(expectedError);
-      done();
-    }
+    await expect(getUser({
+      ...CONTEXT,
+      auth: {
+        ...CONTEXT.auth,
+        id: ObjectId(),
+      },
+    }, USER._id))
+      .rejects
+      .toEqual(expectedError);
   });
 
   it('should let users get their own profile', async () => {

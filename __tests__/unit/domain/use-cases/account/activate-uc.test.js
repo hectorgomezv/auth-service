@@ -39,38 +39,26 @@ describe('[use-cases-tests] [account] [activate]', () => {
     });
   });
 
-  it('should fail if the repository can find the activation code', async (done) => {
-    try {
-      UserRepository.findByActivationCode = jest.fn(() => null);
-      await activate(DATA);
-      done.fail();
-    } catch (err) {
-      expect(err).toMatchObject({
-        name: 'NotFoundError',
-        message: ACTIVATION_CODE_NOT_FOUND,
-        code: NOT_FOUND,
-      });
-      done();
-    }
+  it('should fail if the repository can find the activation code', async () => {
+    UserRepository.findByActivationCode = jest.fn(() => null);
+    await expect(activate(DATA)).rejects.toMatchObject({
+      name: 'NotFoundError',
+      message: ACTIVATION_CODE_NOT_FOUND,
+      code: NOT_FOUND,
+    });
   });
 
-  it('should fail if the found user is already active', async (done) => {
-    try {
-      UserRepository.findByActivationCode.mockResolvedValue({
-        ...USER,
-        active: true,
-      });
+  it('should fail if the found user is already active', async () => {
+    UserRepository.findByActivationCode.mockResolvedValue({
+      ...USER,
+      active: true,
+    });
 
-      await activate(DATA);
-      done.fail();
-    } catch (err) {
-      expect(err).toMatchObject({
-        name: 'ActivationError',
-        message: ALREADY_ACTIVE_ERROR,
-        code: NOT_ACCEPTABLE,
-      });
-      done();
-    }
+    await expect(activate(DATA)).rejects.toMatchObject({
+      name: 'ActivationError',
+      message: ALREADY_ACTIVE_ERROR,
+      code: NOT_ACCEPTABLE,
+    });
   });
 
   it('should activate the account', async () => {
