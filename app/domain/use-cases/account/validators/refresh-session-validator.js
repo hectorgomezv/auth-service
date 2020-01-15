@@ -9,6 +9,6 @@ const Joi = require('@hapi/joi');
 const schema = Joi.object().keys({
   accessToken: Joi.string().required().label('accessToken'),
   refreshToken: Joi.string().required().label('refreshToken'),
-});
+}).required();
 
 module.exports = async (data) => schema.validateAsync(data);

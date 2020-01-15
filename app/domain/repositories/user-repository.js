@@ -31,7 +31,8 @@ class UserRepository {
       {
         $project: {
           email: 1,
-          roles: 1,
+          role: 1,
+          active: 1,
           sessions: {
             $filter: {
               input: '$sessions',
@@ -43,7 +44,7 @@ class UserRepository {
           },
         },
       },
-    ]);
+    ]).toArray();
 
     return user;
   }

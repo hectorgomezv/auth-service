@@ -70,7 +70,7 @@ describe('[use-cases-tests] [account] [refresh-session]', () => {
     }));
 
     await expect(refreshSession(DATA)).rejects.toMatchObject({
-      name: 'UnauthorizedError',
+      name: 'ActivationError',
       message: INACTIVE_USER_ERROR,
       code: UNAUTHORIZED,
     });
@@ -83,7 +83,7 @@ describe('[use-cases-tests] [account] [refresh-session]', () => {
     }));
 
     await expect(refreshSession(DATA)).rejects.toMatchObject({
-      name: 'UnauthorizedError',
+      name: 'NotFoundError',
       message: SESSION_NOT_FOUND,
       pointer: `user:${USER._id}`,
       code: UNAUTHORIZED,
@@ -94,8 +94,9 @@ describe('[use-cases-tests] [account] [refresh-session]', () => {
     bcrypt.compare = jest.fn(() => false);
 
     await expect(refreshSession(DATA)).rejects.toMatchObject({
-      name: 'UnauthorizedError',
+      name: 'NotFoundError',
       message: SESSION_NOT_FOUND,
+      pointer: `user:${USER._id}`,
       code: UNAUTHORIZED,
     });
   });
@@ -110,8 +111,9 @@ describe('[use-cases-tests] [account] [refresh-session]', () => {
     }));
 
     await expect(refreshSession(DATA)).rejects.toMatchObject({
-      name: 'UnauthorizedError',
+      name: 'ForbiddenActionError',
       message: EXPIRED_TOKEN,
+      pointer: `user:${USER._id}`,
       code: UNAUTHORIZED,
     });
   });
@@ -127,8 +129,10 @@ describe('[use-cases-tests] [account] [refresh-session]', () => {
       }));
 
     expect(session).toMatchObject(expect.objectContaining({
-      accessToken: expect.any(String),
-      expiresIn: expect.any(Number),
+      data: {
+        accessToken: expect.any(String),
+        expiresIn: expect.any(Number),
+      },
     }));
 
     expect(session).not.toHaveProperty('refreshToken');
