@@ -76,6 +76,7 @@ describe('[integration-tests] [login]', () => {
         accessToken: expect.any(String),
         refreshToken: expect.any(String),
         expiresIn: expect.any(Number),
+        refreshTokenExpiresIn: expect.any(Number),
         user: {
           email: USER.email,
           fullName: USER.fullName,

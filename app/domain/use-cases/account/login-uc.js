@@ -94,6 +94,7 @@ const execute = async (data) => {
       accessToken,
       refreshToken,
       expiresIn: Number(TOKEN_EXPIRATION),
+      refreshTokenExpiresIn: Number(TOKEN_EXPIRATION),
       user,
     },
   };

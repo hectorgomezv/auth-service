@@ -39,54 +39,33 @@ describe('[use-cases-tests] [user] [create-user]', () => {
     EmailRepository.sendRegistration = jest.fn().mockResolvedValue();
   });
 
-  it('should fail if the executor has no permissions', async (done) => {
+  it('should fail if the executor has no permissions', async () => {
     const expectedError = new AccessError(NOT_ALLOWED);
 
     RbacEntity.isUserAllowedTo = jest.fn(() => {
       throw expectedError;
     });
 
-    try {
-      await createUser(CONTEXT, USER);
-      done.fail();
-    } catch (err) {
-      expect(err).toEqual(expectedError);
-      done();
-    }
+    await expect(createUser(CONTEXT, USER)).rejects.toEqual(expectedError)
   });
 
-  it('should fail if someone tries to create a superAdmin', async (done) => {
-    try {
-      await createUser(CONTEXT, {
-        ...USER,
-        role: ROLES.SUPERADMIN.name,
-      });
-
-      done.fail();
-    } catch (err) {
-      expect(err).toMatchObject({
+  it('should fail if someone tries to create a superAdmin', async () => {
+    await expect(createUser(CONTEXT, { ...USER, role: ROLES.SUPERADMIN.name }))
+      .rejects
+      .toMatchObject({
         name: 'ForbiddenActionError',
         message: FORBIDDEN_SUPERADMIN_CREATION,
       });
-      done();
-    }
   });
 
-  it("should fail if the input role isn't recognized", async (done) => {
-    try {
-      await createUser(CONTEXT, {
-        ...USER,
-        role: 'baker',
-      });
-
-      done.fail();
-    } catch (err) {
-      expect(err).toMatchObject({
-        name: 'ForbiddenActionError',
-        message: OPERATION_NOT_SUPPORTED,
-      });
-      done();
-    }
+  it("should fail if the input role isn't recognized", async () => {
+    await expect(createUser(CONTEXT, {
+      ...USER,
+      role: 'baker',
+    })).rejects.toMatchObject({
+      name: 'ForbiddenActionError',
+      message: OPERATION_NOT_SUPPORTED,
+    });
   });
 
   it('should call RbacEntity with the proper params', async () => {
@@ -95,19 +74,12 @@ describe('[use-cases-tests] [user] [create-user]', () => {
     expect(RbacEntity.isUserAllowedTo).toHaveBeenCalledWith(CONTEXT, 'create', USER.role);
   });
 
-  it('should fail if the user already exists', async (done) => {
+  it('should fail if the user already exists', async () => {
     UserRepository.findByEmail.mockResolvedValue(USER);
-
-    try {
-      await createUser(CONTEXT, USER);
-      done.fail();
-    } catch (err) {
-      expect(err).toMatchObject({
-        name: 'ConflictError',
-        message: USER_ALREADY_EXISTS,
-      });
-      done();
-    }
+    await expect(createUser(CONTEXT, USER)).rejects.toMatchObject({
+      name: 'ConflictError',
+      message: USER_ALREADY_EXISTS,
+    });
   });
 
   it('created users should be initially inactive', async () => {

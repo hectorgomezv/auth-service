@@ -40,59 +40,44 @@ describe('[use-cases-tests] [account] [login]', () => {
     UserRepository.addSession = jest.fn().mockResolvedValue(USER_WITH_SESSIONS);
   });
 
-  it('should fail if the repository can find the user email', async (done) => {
-    try {
-      UserRepository.findByEmail = jest.fn(() => null);
-      await login(CREDENTIALS);
-      done.fail();
-    } catch (err) {
-      expect(err).toMatchObject({
-        name: 'AuthenticationError',
-        message: BAD_LOGIN_ERROR,
-        code: UNAUTHORIZED,
-      });
-      done();
-    }
+  it('should fail if the repository can find the user email', async () => {
+    UserRepository.findByEmail = jest.fn(() => null);
+    await expect(login(CREDENTIALS)).rejects.toMatchObject({
+      name: 'AuthenticationError',
+      message: BAD_LOGIN_ERROR,
+      code: UNAUTHORIZED,
+    });
   });
 
-  it('should fail if the found user is not active', async (done) => {
-    try {
-      const hashedPass = await bcrypt.hash(CREDENTIALS.password, 10);
-      UserRepository.findByEmail = jest.fn(() => ({
-        ...USER,
-        password: hashedPass,
-        active: false,
-      }));
-      await login(CREDENTIALS);
-      done.fail();
-    } catch (err) {
-      expect(err).toMatchObject({
-        name: 'AuthenticationError',
-        message: INACTIVE_USER_ERROR,
-        pointer: `email:${USER.email}`,
-        code: UNAUTHORIZED,
-      });
-      done();
-    }
+  it('should fail if the found user is not active', async () => {
+    const hashedPass = await bcrypt.hash(CREDENTIALS.password, 10);
+
+    UserRepository.findByEmail = jest.fn(() => ({
+      ...USER,
+      password: hashedPass,
+      active: false,
+    }));
+
+    await expect(login(CREDENTIALS)).rejects.toMatchObject({
+      name: 'AuthenticationError',
+      message: INACTIVE_USER_ERROR,
+      pointer: `email:${USER.email}`,
+      code: UNAUTHORIZED,
+    });
   });
 
-  it('should fail if the password is incorrect', async (done) => {
-    try {
-      UserRepository.findByEmail = jest.fn(() => ({
-        ...USER,
-        password: 'invalidHashedPassword',
-        active: true,
-      }));
-      await login(CREDENTIALS);
-      done.fail();
-    } catch (err) {
-      expect(err).toMatchObject({
-        name: 'AuthenticationError',
-        message: BAD_LOGIN_ERROR,
-        code: UNAUTHORIZED,
-      });
-      done();
-    }
+  it('should fail if the password is incorrect', async () => {
+    UserRepository.findByEmail = jest.fn(() => ({
+      ...USER,
+      password: 'invalidHashedPassword',
+      active: true,
+    }));
+
+    await expect(login(CREDENTIALS)).rejects.toMatchObject({
+      name: 'AuthenticationError',
+      message: BAD_LOGIN_ERROR,
+      code: UNAUTHORIZED,
+    });
   });
 
   it('should persist session info, and return accessToken, refreshToken, expiresIn and user data', async () => {
@@ -115,6 +100,7 @@ describe('[use-cases-tests] [account] [login]', () => {
         accessToken: expect.any(String),
         refreshToken: expect.any(String),
         expiresIn: expect.any(Number),
+        refreshTokenExpiresIn: expect.any(Number),
         user: USER,
       },
     });

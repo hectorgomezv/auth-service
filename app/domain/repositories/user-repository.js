@@ -25,6 +25,30 @@ class UserRepository {
     return users().findOne({ resetPasswordCode });
   }
 
+  static async findByIdAndFilterSessionByAccessToken(id, accessToken) {
+    const [user] = await users().aggregate([
+      { $match: { _id: ObjectId(id) } },
+      {
+        $project: {
+          email: 1,
+          role: 1,
+          active: 1,
+          sessions: {
+            $filter: {
+              input: '$sessions',
+              as: 'item',
+              cond: {
+                $eq: ['$$item.accessToken', accessToken],
+              },
+            },
+          },
+        },
+      },
+    ]).toArray();
+
+    return user;
+  }
+
   static async create(user) {
     const { ops: [item] } = await users().insertOne(user);
 
