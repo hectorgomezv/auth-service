@@ -6,7 +6,7 @@ const {
   logger,
 } = require('./infrastructure');
 
-const { clearExpiredSessionsBatch } = require('./interfaces/batches');
+const { batches } = require('./interfaces/batches');
 
 const { RbacEntity } = require('./domain/entities/rbac');
 
@@ -14,7 +14,7 @@ const { RbacEntity } = require('./domain/entities/rbac');
   try {
     await database.connect();
     await RbacEntity.init();
-    await clearExpiredSessionsBatch.init();
+    await batches.init();
 
     return webServer.init();
   } catch (err) {

@@ -1,5 +1,5 @@
-const clearExpiredSessionsBatch = require('./clear-expired-sessions-batch');
+const batches = require('./executor');
 
 module.exports = {
-  clearExpiredSessionsBatch,
+  batches,
 };
