@@ -63,6 +63,10 @@ class UserRepository {
     );
   }
 
+  static async clearExpiredSessions() {
+    return 'Hello';
+  }
+
   static async generateResetPasswordCode(userId, resetPasswordCode, expiration) {
     return users().findOneAndUpdate(
       { _id: userId },

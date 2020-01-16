@@ -35,6 +35,7 @@
   "dependencies": {
     "@hapi/joi": "^16.1.4",
     "@sendgrid/mail": "^6.4.0",
+    "agenda": "^2.3.0",
     "bcrypt": "^3.0.7",
     "dotenv": "^8.1.0",
     "fastify": "^2.8.0",
