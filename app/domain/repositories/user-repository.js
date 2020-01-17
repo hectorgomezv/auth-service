@@ -1,5 +1,8 @@
 const { ObjectId } = require('mongodb');
+
 const { db } = require('../../infrastructure/database/mongodb');
+
+const { REFRESH_TOKEN_EXPIRATION } = process.env;
 
 const COLLECTION_NAME = 'users';
 const users = () => db().collection(COLLECTION_NAME);
@@ -61,6 +64,20 @@ class UserRepository {
       { $push: { sessions: session } },
       { returnOriginal: false },
     );
+  }
+
+  static async clearExpiredSessions() {
+    const dateLimit = new Date(Date.now() - Number(REFRESH_TOKEN_EXPIRATION) * 1000);
+
+    return users().updateMany({}, {
+      $pull: {
+        sessions: {
+          createdAt: {
+            $lt: dateLimit,
+          },
+        },
+      },
+    }, { multi: true });
   }
 
   static async generateResetPasswordCode(userId, resetPasswordCode, expiration) {
