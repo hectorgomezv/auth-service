@@ -31,6 +31,7 @@ let con;
 async function setupDatabase() {
   mongoServer = new MongoMemoryServer();
   const mongoUri = await mongoServer.getConnectionString();
+  console.log(mongoUri);
 
   return connect(mongoUri);
 }
@@ -48,7 +49,7 @@ async function setupData(db) {
 describe('[integration-tests] [login]', () => {
   beforeAll(async () => {
     await mountRouters(app);
-    // const db = await setupDatabase();
+    const db = await setupDatabase();
 
     // return setupData(db);
   });
