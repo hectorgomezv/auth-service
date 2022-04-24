@@ -1,4 +1,3 @@
-require('dotenv')
-  .config({ path: './__tests__/test.env' });
+require('dotenv').config({ path: './__tests__/test.env' });
 
-jest.setTimeout(30000);
+jest.setTimeout(10000);
