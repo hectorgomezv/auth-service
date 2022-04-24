@@ -29,7 +29,9 @@ let mongoServer;
 let con;
 
 async function setupDatabase() {
+  console.log('HELLO');
   mongoServer = new MongoMemoryServer();
+  console.log('WORLD');
   const mongoUri = await mongoServer.getConnectionString();
   console.log(mongoUri);
 
