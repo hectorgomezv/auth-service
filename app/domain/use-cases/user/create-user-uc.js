@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const nanoid = require('nanoid');
+const { nanoid } = require('nanoid');
 const uuidV4 = require('uuid/v4');
 
 const { userValidator } = require('./validators');
