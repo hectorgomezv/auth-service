@@ -48,15 +48,15 @@ async function setupData(db) {
 describe('[integration-tests] [login]', () => {
   beforeAll(async () => {
     await mountRouters(app);
-    const db = await setupDatabase();
+    // const db = await setupDatabase();
 
-    return setupData(db);
+    // return setupData(db);
   });
 
-  afterAll(async () => {
-    if (con) con.close();
-    if (mongoServer) await mongoServer.stop();
-  });
+  // afterAll(async () => {
+  //   if (con) con.close();
+  //   if (mongoServer) await mongoServer.stop();
+  // });
 
   it('[200] login successful', async () => {
     const res = await app.inject({
