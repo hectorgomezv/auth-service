@@ -1,5 +1,4 @@
-FROM node:12-buster-slim
-ENV NODE_ENV production
+FROM node:16
 
 WORKDIR /usr/src/app
 
