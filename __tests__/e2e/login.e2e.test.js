@@ -29,11 +29,8 @@ let mongoServer;
 let con;
 
 async function setupDatabase() {
-  console.log('HELLO');
-  mongoServer = new MongoMemoryServer();
-  console.log('WORLD');
-  const mongoUri = await mongoServer.getConnectionString();
-  console.log(mongoUri);
+  mongoServer = await MongoMemoryServer.create();
+  const mongoUri = await mongoServer.getUri();
 
   return connect(mongoUri);
 }
@@ -53,13 +50,13 @@ describe('[integration-tests] [login]', () => {
     await mountRouters(app);
     const db = await setupDatabase();
 
-    // return setupData(db);
+    return setupData(db);
   });
 
-  // afterAll(async () => {
-  //   if (con) con.close();
-  //   if (mongoServer) await mongoServer.stop();
-  // });
+  afterAll(async () => {
+    if (con) con.close();
+    if (mongoServer) await mongoServer.stop();
+  });
 
   it('[200] login successful', async () => {
     const res = await app.inject({

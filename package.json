@@ -28,7 +28,7 @@
     "eslint-plugin-react-hooks": "^1.7.0",
     "faker": "^4.1.0",
     "jest": "^27.5.1",
-    "mongodb-memory-server": "5.2.7",
+    "mongodb-memory-server": "8.5.1",
     "nodemon": "^2.0.15",
     "pino-pretty": "^3.2.1"
   },
