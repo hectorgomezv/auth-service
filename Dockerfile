@@ -10,6 +10,6 @@ COPY ./package*.json ./
 
 RUN npm i
 
-EXPOSE 7000
+EXPOSE 4200
 
 CMD ["npm", "run", "start"]
