@@ -11,7 +11,7 @@ const {
 const { PORT } = process.env;
 
 const app = fastify({ logger });
-const BASE_URL = '/api/auth';
+const BASE_URL = '/api/v1/auth';
 
 const mountRouters = async (appInstance) => {
   await app.register(middie);

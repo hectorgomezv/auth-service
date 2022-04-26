@@ -8,7 +8,7 @@ function buildRegistrationTemplate({
 }) {
   const data = {
     title,
-    actionUrl: `${BASE_URL}/accounts/activate?activationCode=${activationCode}`,
+    actionUrl: `${BASE_URL}/api/v1/auth/accounts/activate?activationCode=${activationCode}`,
   };
 
   return baseTemplate(data);
