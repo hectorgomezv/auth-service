@@ -1,10 +1,7 @@
 const fastify = require('fastify');
 const middie = require('middie');
 
-const {
-  logger,
-  config: loggerConfig,
-} = require('../logger');
+const { logger } = require('../logger');
 
 const {
   accountRouter,
@@ -13,7 +10,7 @@ const {
 
 const { PORT } = process.env;
 
-const app = fastify({ logger: loggerConfig });
+const app = fastify({ logger });
 const BASE_URL = '/api/auth';
 
 const mountRouters = async (appInstance) => {
