@@ -15,6 +15,5 @@ module.exports = (app, _, done) => {
   app.use('/refresh-session', ContextEntity.buildContext);
   app.post('/refresh-session', {}, refreshSessionController);
   app.post('/reset-password', resetPasswordController);
-
   done();
 };

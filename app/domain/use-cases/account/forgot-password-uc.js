@@ -1,4 +1,4 @@
-const uuidV4 = require('uuid/v4');
+const { v4: uuidv4 } = require('uuid');
 const { UNAUTHORIZED } = require('http-status-codes');
 
 const {
@@ -40,7 +40,7 @@ module.exports = async (data) => {
   const { email } = data;
   await emailValidator(email);
   const user = await checkUser(email);
-  const resetPasswordCode = uuidV4();
+  const resetPasswordCode = uuidv4();
   const expiration = new Date(Date.now() + Number(RESET_PASSWORD_CODE_EXPIRATION));
   await UserRepository.generateResetPasswordCode(user._id, resetPasswordCode, expiration);
   await EmailRepository.sendResetPassword(email, resetPasswordCode);

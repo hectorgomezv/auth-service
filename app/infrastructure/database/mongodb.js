@@ -9,26 +9,22 @@ const {
 let connection;
 let client;
 
-const buildMongoClient = (mongoUri = MONGO_CONNECTION_STRING) => new MongoClient(
-  mongoUri,
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    reconnectTries: Number.MAX_VALUE,
-  },
-);
+const buildMongoClient = (mongoUri = MONGO_CONNECTION_STRING) => new MongoClient(mongoUri);
 
 const connect = async (mongoUri) => {
   try {
-    client = buildMongoClient(mongoUri);
-    await client.connect();
-    connection = await client.db(MONGO_DATABASE_NAME);
-    logger.info(`Connected to database ${MONGO_DATABASE_NAME} on MongoDB`);
+    if (!connection) {
+      client = buildMongoClient(mongoUri);
+      await client.connect();
+      connection = await client.db(MONGO_DATABASE_NAME);
+      logger.info(`Connected to database ${MONGO_DATABASE_NAME} on MongoDB`);
+    }
 
     return connection;
   } catch (err) {
     logger.error(err);
-    process.exit(1);
+
+    return process.exit(1);
   }
 };
 

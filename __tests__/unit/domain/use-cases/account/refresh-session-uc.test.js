@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const faker = require('faker');
+const { faker } = require('@faker-js/faker');
 const jwt = require('jsonwebtoken');
 const { UNAUTHORIZED } = require('http-status-codes');
 

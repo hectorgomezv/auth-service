@@ -1,4 +1,4 @@
-const faker = require('faker');
+const { faker } = require('@faker-js/faker');
 const { FORBIDDEN, NOT_FOUND, UNAUTHORIZED } = require('http-status-codes');
 
 const { UserRepository } = require('../../../../../app/domain/repositories');
@@ -12,7 +12,7 @@ const {
 
 const { RESET_PASSWORD_CODE_EXPIRATION } = process.env;
 
-const RESET_PASSWORD_CODE = faker.random.uuid();
+const RESET_PASSWORD_CODE = faker.datatype.uuid();
 const PASSWORD = faker.random.alphaNumeric();
 
 const DATA = {
@@ -28,7 +28,7 @@ const USER = {
   avatarUrl: faker.internet.url(),
   active: true,
   role: faker.random.word(),
-  resetPasswordCode: faker.random.uuid(),
+  resetPasswordCode: faker.datatype.uuid(),
   resetPasswordExpiration: new Date(Date.now() + Number(RESET_PASSWORD_CODE_EXPIRATION)),
 };
 

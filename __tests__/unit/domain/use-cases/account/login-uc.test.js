@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const faker = require('faker');
+const { faker } = require('@faker-js/faker');
 const { UNAUTHORIZED } = require('http-status-codes');
 
 const {
@@ -28,8 +28,8 @@ const USER = {
 const USER_WITH_SESSIONS = {
   ...USER,
   sessions: [{
-    accessToken: faker.random.uuid(),
-    refreshToken: faker.random.uuid(),
+    accessToken: faker.datatype.uuid(),
+    refreshToken: faker.datatype.uuid(),
     createdAt: faker.date.past(),
   }],
 };

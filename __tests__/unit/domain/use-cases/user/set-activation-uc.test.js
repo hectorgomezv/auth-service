@@ -1,4 +1,4 @@
-const faker = require('faker');
+const { faker } = require('@faker-js/faker');
 const { ObjectId } = require('mongodb');
 const { CONFLICT, FORBIDDEN, NOT_ALLOWED } = require('http-status-codes');
 

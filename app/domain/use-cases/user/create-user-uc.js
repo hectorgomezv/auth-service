@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const { nanoid } = require('nanoid');
-const uuidV4 = require('uuid/v4');
+const { v4: uuidv4 } = require('uuid');
 
 const { userValidator } = require('./validators');
 
@@ -50,7 +50,7 @@ const checkPermissions = async (context, data) => {
  */
 const buildUser = async (data) => {
   const password = await bcrypt.hash(nanoid(), 10);
-  const activationCode = uuidV4();
+  const activationCode = uuidv4();
 
   const {
     email,
