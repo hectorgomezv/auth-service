@@ -13,7 +13,7 @@ const {
   },
 } = require('../../app/infrastructure');
 
-const URL = '/api/auth/accounts/login';
+const URL = '/api/v1/auth/accounts/login';
 
 const USER = {
   email: faker.internet.email(),
