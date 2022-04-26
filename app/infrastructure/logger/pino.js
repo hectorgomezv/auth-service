@@ -1,3 +1,12 @@
-const pino = require('pino');
+const Pino = require('pino');
 
-module.exports = pino();
+const logger = Pino({
+  level: 'info',
+  prettyPrint: {
+    colorize: true,
+    translateTime: 'SYS:standard',
+    ignore: 'hostname,pid',
+  },
+});
+
+module.exports = logger;

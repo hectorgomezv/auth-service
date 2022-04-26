@@ -14,12 +14,12 @@ const {
 const { PORT } = process.env;
 
 const app = fastify({ logger: loggerConfig });
-const baseUrl = '/api/auth';
+const BASE_URL = '/api/auth';
 
 const mountRouters = async (appInstance) => {
   await app.register(middie);
-  appInstance.register(accountRouter, { prefix: `${baseUrl}/accounts` });
-  appInstance.register(userRouter, { prefix: `${baseUrl}/users` });
+  appInstance.register(accountRouter, { prefix: `${BASE_URL}/accounts` });
+  appInstance.register(userRouter, { prefix: `${BASE_URL}/users` });
 };
 
 const init = async (port = Number(PORT)) => {
