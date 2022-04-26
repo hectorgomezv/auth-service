@@ -7,7 +7,8 @@
     "dev": "./node_modules/.bin/nodemon ./app",
     "test": "jest -i --watch",
     "test:coverage": "jest -i --collectCoverage --forceExit",
-    "start": "node ./app"
+    "start": "node ./app",
+    "postversion": "git push && git push --tags"
   },
   "keywords": [],
   "author": "",
