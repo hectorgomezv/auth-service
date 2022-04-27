@@ -12,7 +12,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Run unit tests
-        run: npm ci && npm run test:coverage
+        run: npm i && npm run test:coverage
 
       - name: Extract commit metadata
         id: meta
