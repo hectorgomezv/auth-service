@@ -53,9 +53,7 @@ class UserRepository {
   }
 
   static async create(user) {
-    const { ops: [item] } = await users().insertOne(user);
-
-    return item;
+    await users().insertOne(user);
   }
 
   static async addSession(userId, session) {

@@ -80,18 +80,18 @@ const execute = async (context, data) => {
   await userValidator(data);
   await checkPermissions(context, data);
 
-  const user = await UserRepository.findByEmail(data.email);
+  const existentUser = await UserRepository.findByEmail(data.email);
 
-  if (user) {
+  if (existentUser) {
     throw new ConflictError(USER_ALREADY_EXISTS, `email:${data.email}`);
   }
 
-  const userModel = await buildUser(data);
-  const { email, activationCode } = userModel;
+  const user = await buildUser(data);
+  const { email, activationCode } = user;
   await EmailRepository.sendRegistration(email, activationCode);
-  const created = await UserRepository.create(userModel);
+  await UserRepository.create(user);
 
-  return created;
+  return user;
 };
 
 module.exports = execute;
