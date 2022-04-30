@@ -13,11 +13,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "config": {
-    "mongodbMemoryServer": {
-      "version": "latest"
-    }
-  },
   "dependencies": {
     "@sendgrid/mail": "^7.6.2",
     "agenda": "^4.2.1",
