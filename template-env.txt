@@ -6,7 +6,6 @@ SUPERADMIN_PASSWORD=superSecret
 # WEB
 PORT=80
 BASE_URL=https://www.yourdomain.com
-CORS_BASE_URL=https://www.yourdomain.com
 
 # DATABASES
 MONGO_CONNECTION_STRING=mongodb://localhost:27017/
