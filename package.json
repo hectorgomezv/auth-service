@@ -33,6 +33,7 @@
     "pino-pretty": "^3.2.1"
   },
   "dependencies": {
+    "@fastify/cors": "^7.0.0",
     "@hapi/joi": "^16.1.4",
     "@sendgrid/mail": "^6.4.0",
     "agenda": "^2.3.0",
