@@ -1,4 +1,4 @@
-const faker = require('faker');
+const { faker } = require('@faker-js/faker');
 const bcrypt = require('bcrypt');
 const { OK } = require('http-status-codes');
 const { MongoMemoryServer } = require('mongodb-memory-server');
@@ -13,7 +13,7 @@ const {
   },
 } = require('../../app/infrastructure');
 
-const URL = '/api/auth/accounts/login';
+const URL = '/api/v1/auth/accounts/login';
 
 const USER = {
   email: faker.internet.email(),
@@ -29,8 +29,8 @@ let mongoServer;
 let con;
 
 async function setupDatabase() {
-  mongoServer = new MongoMemoryServer();
-  const mongoUri = await mongoServer.getConnectionString();
+  mongoServer = await MongoMemoryServer.create();
+  const mongoUri = await mongoServer.getUri();
 
   return connect(mongoUri);
 }

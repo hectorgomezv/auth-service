@@ -1,4 +1,4 @@
-const faker = require('faker');
+const { faker } = require('@faker-js/faker');
 
 const {
   NOT_FOUND,
@@ -13,7 +13,7 @@ const {
 const { UserRepository } = require('../../../../../app/domain/repositories');
 const { activate } = require('../../../../../app/domain/use-cases/account');
 
-const ACTIVATION_CODE = faker.random.uuid();
+const ACTIVATION_CODE = faker.datatype.uuid();
 const PASSWORD = faker.random.alphaNumeric();
 
 const USER = {

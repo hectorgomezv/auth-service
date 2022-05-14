@@ -1,4 +1,8 @@
-const pino = require('pino');
-const config = require('./pino-config');
+const Pino = require('pino');
 
-module.exports = pino(config);
+const logger = Pino({
+  level: 'info',
+  timestamp: Pino.stdTimeFunctions.isoTime,
+});
+
+module.exports = logger;

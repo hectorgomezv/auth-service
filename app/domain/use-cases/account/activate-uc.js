@@ -12,7 +12,7 @@ const {
   ActivationError,
 } = require('../errors');
 
-const { UserRepository } = require('../../../../app/domain/repositories');
+const { UserRepository } = require('../../repositories');
 
 /**
  * Activates an user by its activationCode.

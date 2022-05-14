@@ -1,4 +1,4 @@
-const faker = require('faker');
+const { faker } = require('@faker-js/faker');
 const { NOT_FOUND, UNAUTHORIZED } = require('http-status-codes');
 
 const {

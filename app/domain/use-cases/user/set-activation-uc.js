@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const Joi = require('@hapi/joi');
+const Joi = require('joi');
 
 const { NotFoundError, ConflictError, ForbiddenActionError } = require('../errors');
 const { USER_NOT_FOUND } = require('./error-messages');

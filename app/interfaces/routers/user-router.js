@@ -7,7 +7,7 @@ const {
   activationController,
 } = require('../controllers/user');
 
-module.exports = (app, opts, done) => {
+module.exports = (app, _, done) => {
   app.use('/', ContextEntity.buildContext);
   app.post('/', createUserController);
   app.get('/', {}, getUsersController);
