@@ -1,4 +1,5 @@
 const fastify = require('fastify');
+const cors = require('@fastify/cors');
 const middie = require('middie');
 
 const { logger } = require('../logger');
@@ -8,10 +9,22 @@ const {
   userRouter,
 } = require('../../interfaces/routers');
 
-const { PORT } = process.env;
+const { CORS_BASE_URL, PORT } = process.env;
 
 const app = fastify({ logger });
 const BASE_URL = '/api/v1/auth';
+
+const getAllowedOrigins = () => {
+  const allowedOrigins = [/localhost/];
+
+  return CORS_BASE_URL
+    ? [...allowedOrigins, new URL(CORS_BASE_URL).hostname]
+    : allowedOrigins;
+};
+
+app.register(cors, {
+  origin: getAllowedOrigins(),
+});
 
 const mountRouters = async (appInstance) => {
   await app.register(middie);
