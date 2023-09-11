@@ -4,10 +4,7 @@ const middie = require('middie');
 
 const { logger } = require('../logger');
 
-const {
-  accountRouter,
-  userRouter,
-} = require('../../interfaces/routers');
+const { accountRouter, userRouter } = require('../../interfaces/routers');
 
 const { CORS_BASE_URL, PORT } = process.env;
 
@@ -36,7 +33,7 @@ const init = async (port = Number(PORT)) => {
   try {
     await mountRouters(app);
     logger.info(`Listening on ${port}`);
-    return app.listen(port, '0.0.0.0');
+    return app.listen({ port, address: '0.0.0.0' });
   } catch (err) {
     logger.error(err);
     return process.exit(1);
