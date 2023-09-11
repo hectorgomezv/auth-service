@@ -33,7 +33,7 @@ const init = async (port = Number(PORT)) => {
   try {
     await mountRouters(app);
     logger.info(`Listening on ${port}`);
-    return app.listen({ port, address: '0.0.0.0' });
+    return app.listen({ port, host: '0.0.0.0' });
   } catch (err) {
     logger.error(err);
     return process.exit(1);
