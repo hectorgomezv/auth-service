@@ -25,7 +25,7 @@
     "jsonwebtoken": "^9.0.0",
     "lodash": "^4.17.21",
     "middie": "^7.1.0",
-    "migrate-mongo": "^10.0.0",
+    "migrate-mongo": "^11.0.0",
     "mongodb": "^4.5.0",
     "nanoid": "^5.0.1",
     "pino": "^8.15.1",
