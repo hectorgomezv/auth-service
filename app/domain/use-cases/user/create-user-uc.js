@@ -1,28 +1,19 @@
-const bcrypt = require('bcrypt');
-const { nanoid } = require('nanoid');
-const { v4: uuidv4 } = require('uuid');
+import { nanoid } from 'nanoid';
 
-const { userValidator } = require('./validators');
-
-const {
+import bcrypt from 'bcrypt';
+import { v4 as uuidv4 } from 'uuid';
+import { ROLES } from '../../config/roles-config.js';
+import RbacEntity from '../../entities/rbac/rbac-entity.js';
+import EmailRepository from '../../repositories/email-repository.js';
+import UserRepository from '../../repositories/user-repository.js';
+import ConflictError from '../errors/conflict-error.js';
+import ForbiddenActionError from '../errors/forbidden-action-error.js';
+import {
   FORBIDDEN_SUPERADMIN_CREATION,
   OPERATION_NOT_SUPPORTED,
   USER_ALREADY_EXISTS,
-} = require('./error-messages');
-
-const {
-  ConflictError,
-  ForbiddenActionError,
-} = require('../errors');
-
-const { ROLES } = require('../../config/roles-config');
-
-const {
-  EmailRepository,
-  UserRepository,
-} = require('../../repositories');
-
-const { RbacEntity } = require('../../entities/rbac');
+} from './error-messages/error-messages.js';
+import userValidator from './validators/user-validator.js';
 
 /**
  * Check the permissions to create a new user.
@@ -32,7 +23,11 @@ const { RbacEntity } = require('../../entities/rbac');
 const checkPermissions = async (context, data) => {
   const { role } = data;
 
-  if (!Object.values(ROLES).map(r => r.name).includes(role)) {
+  if (
+    !Object.values(ROLES)
+      .map((r) => r.name)
+      .includes(role)
+  ) {
     throw new ForbiddenActionError(OPERATION_NOT_SUPPORTED);
   }
 
@@ -52,12 +47,7 @@ const buildUser = async (data) => {
   const password = await bcrypt.hash(nanoid(), 10);
   const activationCode = uuidv4();
 
-  const {
-    email,
-    avatarUrl,
-    fullName,
-    role,
-  } = data;
+  const { email, avatarUrl, fullName, role } = data;
 
   return {
     email,
@@ -76,7 +66,7 @@ const buildUser = async (data) => {
  * @param {Context} execution context.
  * @param {Object} data data to fill the new user profile.
  */
-const execute = async (context, data) => {
+export default async (context, data) => {
   await userValidator(data);
   await checkPermissions(context, data);
 
@@ -93,5 +83,3 @@ const execute = async (context, data) => {
 
   return user;
 };
-
-module.exports = execute;

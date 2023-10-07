@@ -1,21 +1,14 @@
-const sendgridMail = require('@sendgrid/mail');
+import sendgridMail from '@sendgrid/mail';
+import logger from '../../infrastructure/logger/pino.js';
+import buildRegistrationTemplate from './email-templates/registration-template.js';
+import buildResetPasswordTemplate from './email-templates/reset-password-template.js';
+import EmailError from './errors/email-error.js';
 
-const {
-  buildRegistrationTemplate,
-  buildResetPasswordTemplate,
-} = require('./email-templates');
-
-const { EmailError } = require('./errors');
-const { logger } = require('../../infrastructure/logger');
-
-const {
-  SENDGRID_API_KEY,
-  BASE_EMAIL,
-} = process.env;
+const { SENDGRID_API_KEY, BASE_EMAIL } = process.env;
 
 sendgridMail.setApiKey(SENDGRID_API_KEY);
 
-class EmailRepository {
+export default class EmailRepository {
   /**
    * Sends an email for user registration with a link to activate the account.
    * @param {String} email target user email.
@@ -47,11 +40,11 @@ class EmailRepository {
   }
 
   /**
- * Sends an email for a user who forgot its password. Includes a resetPasswordCode.
- * @param {String} email target user email.
- * @returns {Promise} resolved to true if the email was sent.
- * @throws EmailError if the email could not be sent.
- */
+   * Sends an email for a user who forgot its password. Includes a resetPasswordCode.
+   * @param {String} email target user email.
+   * @returns {Promise} resolved to true if the email was sent.
+   * @throws EmailError if the email could not be sent.
+   */
   static async sendResetPassword(address, resetPasswordCode) {
     try {
       const msg = {
@@ -76,5 +69,3 @@ class EmailRepository {
     }
   }
 }
-
-module.exports = EmailRepository;

@@ -1,17 +1,15 @@
-const { MongoClient } = require('mongodb');
-const { logger } = require('../logger');
+import { MongoClient } from 'mongodb';
+import logger from '../logger/pino.js';
 
-const {
-  MONGO_CONNECTION_STRING,
-  MONGO_DATABASE_NAME,
-} = process.env;
+const { MONGO_CONNECTION_STRING, MONGO_DATABASE_NAME } = process.env;
 
 let connection;
 let client;
 
-const buildMongoClient = (mongoUri = MONGO_CONNECTION_STRING) => new MongoClient(mongoUri);
+const buildMongoClient = (mongoUri = MONGO_CONNECTION_STRING) =>
+  new MongoClient(mongoUri);
 
-const connect = async (mongoUri) => {
+export const connect = async (mongoUri) => {
   try {
     if (!connection) {
       client = buildMongoClient(mongoUri);
@@ -28,14 +26,8 @@ const connect = async (mongoUri) => {
   }
 };
 
-const disconnect = async () => {
+export const disconnect = async () => {
   await client.close();
 };
 
-const db = () => connection;
-
-module.exports = {
-  db,
-  connect,
-  disconnect,
-};
+export const db = () => connection;

@@ -1,4 +1,4 @@
-const Joi = require('joi');
+import Joi from 'joi';
 
 /**
  * Validates the passed activation code and passwords.
@@ -11,7 +11,10 @@ const Joi = require('joi');
 const schema = Joi.object().keys({
   activationCode: Joi.string().guid().required().label('activationCode'),
   password: Joi.string().required().label('password'),
-  repeatedPassword: Joi.string().required().valid(Joi.ref('password')).label('repeatedPassword'),
+  repeatedPassword: Joi.string()
+    .required()
+    .valid(Joi.ref('password'))
+    .label('repeatedPassword'),
 });
 
-module.exports = async (data) => schema.validateAsync(data);
+export default async (data) => schema.validateAsync(data);

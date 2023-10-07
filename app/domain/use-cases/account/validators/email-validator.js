@@ -1,4 +1,4 @@
-const Joi = require('joi');
+import Joi from 'joi';
 
 /**
  * Validates the passed email.
@@ -7,4 +7,4 @@ const Joi = require('joi');
 
 const schema = Joi.string().email().required().label('email');
 
-module.exports = async (data) => schema.validateAsync(data);
+export default async (data) => schema.validateAsync(data);

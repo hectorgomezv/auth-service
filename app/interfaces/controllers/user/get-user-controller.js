@@ -1,8 +1,8 @@
-const { jsonErrorAdapter } = require('../../adapters');
-const { profileAdapter } = require('../../adapters/user');
-const { getUser } = require('../../../domain/use-cases/user');
+import getUser from '../../../domain/use-cases/user/get-user-uc.js';
+import jsonErrorAdapter from '../../adapters/json-error-adapter.js';
+import profileAdapter from '../../adapters/user/profile-adapter.js';
 
-module.exports = async (req, res) => {
+export default async (req, res) => {
   try {
     const { context } = req.raw;
     const { id } = req.params;

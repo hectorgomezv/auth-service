@@ -1,27 +1,24 @@
-const { v4: uuidv4 } = require('uuid');
-const { UNAUTHORIZED } = require('http-status-codes');
-
-const {
-  USER_NOT_FOUND,
+import { StatusCodes } from 'http-status-codes';
+import { v4 as uuidv4 } from 'uuid';
+import {
   INACTIVE_USER_ERROR,
-} = require('./error-messages');
-
-const { emailValidator } = require('./validators');
-const { NotFoundError, ActivationError } = require('../errors');
-const {
-  EmailRepository,
-  UserRepository,
-} = require('../../repositories');
+  USER_NOT_FOUND,
+} from './error-messages/error-messages.js';
+import EmailRepository from '../../repositories/email-repository.js';
+import UserRepository from '../../repositories/user-repository.js';
+import ActivationError from '../errors/activation-error.js';
+import NotFoundError from '../errors/not-found-error.js';
+import emailValidator from './validators/email-validator.js';
 
 const { RESET_PASSWORD_CODE_EXPIRATION } = process.env;
 
 /**
-* Verifies the passed email belong to a user who is active.
-* @param {String} email email
-* @throws {NotFoundError} if the user does not exist.
-* @throws {ActivationError} if the user is not currently active.
-* @returns {User} user found.
-*/
+ * Verifies the passed email belong to a user who is active.
+ * @param {String} email email
+ * @throws {NotFoundError} if the user does not exist.
+ * @throws {ActivationError} if the user is not currently active.
+ * @returns {User} user found.
+ */
 const checkUser = async (email) => {
   const user = await UserRepository.findByEmail(email);
 
@@ -30,18 +27,28 @@ const checkUser = async (email) => {
   }
 
   if (!user.active) {
-    throw new ActivationError(INACTIVE_USER_ERROR, `email:${email}`, UNAUTHORIZED);
+    throw new ActivationError(
+      INACTIVE_USER_ERROR,
+      `email:${email}`,
+      StatusCodes.UNAUTHORIZED,
+    );
   }
 
   return user;
 };
 
-module.exports = async (data) => {
+export default async (data) => {
   const { email } = data;
   await emailValidator(email);
   const user = await checkUser(email);
   const resetPasswordCode = uuidv4();
-  const expiration = new Date(Date.now() + Number(RESET_PASSWORD_CODE_EXPIRATION));
-  await UserRepository.generateResetPasswordCode(user._id, resetPasswordCode, expiration);
+  const expiration = new Date(
+    Date.now() + Number(RESET_PASSWORD_CODE_EXPIRATION),
+  );
+  await UserRepository.generateResetPasswordCode(
+    user._id,
+    resetPasswordCode,
+    expiration,
+  );
   await EmailRepository.sendResetPassword(email, resetPasswordCode);
 };

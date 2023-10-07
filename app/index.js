@@ -1,18 +1,14 @@
-require('dotenv').config();
+import 'dotenv/config';
 
-const {
-  webServer,
-  database,
-  logger,
-} = require('./infrastructure');
-
-const { batches } = require('./interfaces/batches');
-
-const { RbacEntity } = require('./domain/entities/rbac');
+import webServer from './infrastructure/web-server/web-server.js';
+import { connect } from './infrastructure/database/mongodb.js';
+import logger from './infrastructure/logger/pino.js';
+import batches from './interfaces/batches/executor.js';
+import RbacEntity from './domain/entities/rbac/rbac-entity.js';
 
 (async () => {
   try {
-    await database.connect();
+    await connect();
     await RbacEntity.init();
     await batches.init();
 

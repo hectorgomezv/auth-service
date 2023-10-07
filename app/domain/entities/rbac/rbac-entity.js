@@ -1,13 +1,11 @@
-const Joi = require('joi');
-const { RBAC } = require('rbac');
-
-const {
+import Joi from 'joi';
+import { RBAC } from 'rbac';
+import {
   AUTH_NOT_INITIALIZED,
   NOT_ALLOWED,
-} = require('./error-messages');
-
-const { RbacConfig } = require('../../config');
-const { AccessError } = require('../errors');
+} from './error-messages/error-messages.js';
+import RbacConfig from '../../config/rbac-config.js';
+import AccessError from '../errors/access-error.js';
 
 let rbac;
 
@@ -61,7 +59,7 @@ async function isUserAllowedTo(context, action, resource) {
   return true;
 }
 
-module.exports = {
+export default {
   init,
   isUserAllowedTo,
 };

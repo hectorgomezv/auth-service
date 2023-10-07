@@ -1,14 +1,14 @@
-const { CONFLICT } = require('http-status-codes');
+import { StatusCodes } from 'http-status-codes';
 
 class ConflictError extends Error {
   constructor(message, pointer, code, data) {
     super();
     this.name = 'ConflictError';
     this.message = message;
-    this.code = code || CONFLICT;
+    this.code = code || StatusCodes.CONFLICT;
     this.pointer = pointer;
     this.data = data;
   }
 }
 
-module.exports = ConflictError;
+export default ConflictError;

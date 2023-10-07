@@ -1,5 +1,5 @@
 const UnknownError = require('./unknown-error');
 
-module.exports = {
+export default {
   UnknownError,
 };

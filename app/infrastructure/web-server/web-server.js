@@ -1,10 +1,10 @@
-const fastify = require('fastify');
-const cors = require('@fastify/cors');
-const middie = require('middie');
+import fastify from 'fastify';
+import cors from '@fastify/cors';
+import middie from 'middie';
 
-const { logger } = require('../logger');
-
-const { accountRouter, userRouter } = require('../../interfaces/routers');
+import logger from '../logger/pino.js';
+import accountRouter from '../../interfaces/routers/account-router.js';
+import userRouter from '../../interfaces/routers/user-router.js';
 
 const { CORS_BASE_URL, PORT } = process.env;
 
@@ -40,7 +40,7 @@ const init = async (port = Number(PORT)) => {
   }
 };
 
-module.exports = {
+export default {
   app,
   init,
   mountRouters,

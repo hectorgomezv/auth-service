@@ -1,18 +1,12 @@
-const bcrypt = require('bcrypt');
-
-const { activationValidator } = require('./validators');
-
-const {
+import bcrypt from 'bcrypt';
+import ActivationError from '../errors/activation-error.js';
+import NotFoundError from '../errors/not-found-error.js';
+import {
   ACTIVATION_CODE_NOT_FOUND,
   ALREADY_ACTIVE_ERROR,
-} = require('./error-messages');
-
-const {
-  NotFoundError,
-  ActivationError,
-} = require('../errors');
-
-const { UserRepository } = require('../../repositories');
+} from './error-messages/error-messages.js';
+import activationValidator from './validators/activation-validator.js';
+import UserRepository from '../../repositories/user-repository.js';
 
 /**
  * Activates an user by its activationCode.
@@ -43,4 +37,4 @@ const execute = async (data) => {
   };
 };
 
-module.exports = execute;
+export default execute;

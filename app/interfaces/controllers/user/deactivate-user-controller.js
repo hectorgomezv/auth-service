@@ -1,8 +1,8 @@
-const { jsonErrorAdapter } = require('../../adapters');
+import jsonErrorAdapter from '../../adapters/json-error-adapter.js';
 const { profileAdapter } = require('../../adapters/user');
 const { deactivateUser } = require('../../../domain/use-cases/user');
 
-module.exports = async (req, res) => {
+export default async (req, res) => {
   try {
     const { context } = req.raw;
     const { id } = req.params;

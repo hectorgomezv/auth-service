@@ -1,22 +1,22 @@
-module.exports = {
+export default {
   env: {
     browser: true,
     commonjs: true,
     es2021: true,
-    "jest/globals": true,
+    'jest/globals': true,
   },
-  extends: ["airbnb-base"],
+  extends: ['airbnb-base'],
   parserOptions: {
-    ecmaVersion: "latest",
+    ecmaVersion: 'latest',
   },
-  plugins: ["jest"],
+  plugins: ['jest'],
   rules: {
-    "arrow-parens": "off",
-    "no-underscore-dangle": "off",
-    "jest/no-disabled-tests": "warn",
-    "jest/no-focused-tests": "error",
-    "jest/no-identical-title": "error",
-    "jest/prefer-to-have-length": "warn",
-    "jest/valid-expect": "error",
+    'arrow-parens': 'off',
+    'no-underscore-dangle': 'off',
+    'jest/no-disabled-tests': 'warn',
+    'jest/no-focused-tests': 'error',
+    'jest/no-identical-title': 'error',
+    'jest/prefer-to-have-length': 'warn',
+    'jest/valid-expect': 'error',
   },
 };

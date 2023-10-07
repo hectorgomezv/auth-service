@@ -1,13 +1,12 @@
-const { ObjectId } = require('mongodb');
-
-const { db } = require('../../infrastructure/database/mongodb');
+import { ObjectId } from 'mongodb';
+import { db } from '../../infrastructure/database/mongodb.js';
 
 const { REFRESH_TOKEN_EXPIRATION } = process.env;
 
 const COLLECTION_NAME = 'users';
 const users = () => db().collection(COLLECTION_NAME);
 
-class UserRepository {
+export default class UserRepository {
   static async find() {
     return users().find({}).toArray();
   }
@@ -29,25 +28,27 @@ class UserRepository {
   }
 
   static async findByIdAndFilterSessionByAccessToken(id, accessToken) {
-    const [user] = await users().aggregate([
-      { $match: { _id: ObjectId(id) } },
-      {
-        $project: {
-          email: 1,
-          role: 1,
-          active: 1,
-          sessions: {
-            $filter: {
-              input: '$sessions',
-              as: 'item',
-              cond: {
-                $eq: ['$$item.accessToken', accessToken],
+    const [user] = await users()
+      .aggregate([
+        { $match: { _id: ObjectId(id) } },
+        {
+          $project: {
+            email: 1,
+            role: 1,
+            active: 1,
+            sessions: {
+              $filter: {
+                input: '$sessions',
+                as: 'item',
+                cond: {
+                  $eq: ['$$item.accessToken', accessToken],
+                },
               },
             },
           },
         },
-      },
-    ]).toArray();
+      ])
+      .toArray();
 
     return user;
   }
@@ -65,20 +66,30 @@ class UserRepository {
   }
 
   static async clearExpiredSessions() {
-    const dateLimit = new Date(Date.now() - Number(REFRESH_TOKEN_EXPIRATION) * 1000);
+    const dateLimit = new Date(
+      Date.now() - Number(REFRESH_TOKEN_EXPIRATION) * 1000,
+    );
 
-    return users().updateMany({}, {
-      $pull: {
-        sessions: {
-          createdAt: {
-            $lt: dateLimit,
+    return users().updateMany(
+      {},
+      {
+        $pull: {
+          sessions: {
+            createdAt: {
+              $lt: dateLimit,
+            },
           },
         },
       },
-    }, { multi: true });
+      { multi: true },
+    );
   }
 
-  static async generateResetPasswordCode(userId, resetPasswordCode, expiration) {
+  static async generateResetPasswordCode(
+    userId,
+    resetPasswordCode,
+    expiration,
+  ) {
     return users().findOneAndUpdate(
       { _id: userId },
       {
@@ -140,5 +151,3 @@ class UserRepository {
     return value;
   }
 }
-
-module.exports = UserRepository;

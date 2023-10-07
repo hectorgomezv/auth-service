@@ -1,15 +1,18 @@
-const _ = require('lodash');
-const Joi = require('joi');
+import Joi from 'joi';
+import { get } from 'lodash-es';
+import { ROLES } from '../../config/roles-config.js';
+import RbacEntity from '../../entities/rbac/rbac-entity.js';
+import UserRepository from '../../repositories/user-repository.js';
+import ConflictError from '../errors/conflict-error.js';
+import ForbiddenActionError from '../errors/forbidden-action-error.js';
+import NotFoundError from '../errors/not-found-error.js';
+import { USER_NOT_FOUND } from './error-messages/error-messages.js';
 
-const { NotFoundError, ConflictError, ForbiddenActionError } = require('../errors');
-const { USER_NOT_FOUND } = require('./error-messages');
-const { RbacEntity } = require('../../entities/rbac');
-const { UserRepository } = require('../../repositories');
-const { ROLES } = require('../../config/roles-config');
-
-const patchSchema = Joi.object().keys({
-  active: Joi.boolean().strict(),
-}).required();
+const patchSchema = Joi.object()
+  .keys({
+    active: Joi.boolean().strict(),
+  })
+  .required();
 
 /**
  * Checks permissions for set-activation.
@@ -36,7 +39,7 @@ const checkPermissions = async (context, user) => {
  */
 const execute = async (context, id, patch) => {
   await patchSchema.validateAsync(patch);
-  const userId = _.get(context, 'auth.id');
+  const userId = get(context, 'auth.id');
 
   if (userId === id) {
     throw new ConflictError('Self-(de)activation is not allowed');
@@ -53,4 +56,4 @@ const execute = async (context, id, patch) => {
   return UserRepository.setActivationState(id, patch.active);
 };
 
-module.exports = execute;
+export default execute;

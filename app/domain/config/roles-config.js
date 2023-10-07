@@ -1,4 +1,4 @@
-const ROLES = {
+export const ROLES = {
   SUPERADMIN: {
     name: 'superAdmin',
     level: 1,
@@ -11,8 +11,4 @@ const ROLES = {
     name: 'user',
     level: 3,
   },
-};
-
-module.exports = {
-  ROLES,
 };

@@ -1,10 +1,10 @@
-const clearExpiredSessions = require('./clear-expired-sessions-uc');
-const createUser = require('./create-user-uc');
-const getUser = require('./get-user-uc');
-const getUsers = require('./get-users-uc');
-const setActivation = require('./set-activation-uc');
+import clearExpiredSessions from './clear-expired-sessions-uc';
+import createUser from './create-user-uc';
+import getUser from './get-user-uc';
+import getUsers from './get-users-uc';
+import setActivation from './set-activation-uc';
 
-module.exports = {
+export default {
   clearExpiredSessions,
   createUser,
   getUser,
