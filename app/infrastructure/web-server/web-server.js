@@ -1,6 +1,6 @@
 import fastify from 'fastify';
 import cors from '@fastify/cors';
-import middie from 'middie';
+import middie from '@fastify/middie';
 
 import logger from '../logger/pino.js';
 import accountRouter from '../../interfaces/routers/account-router.js';

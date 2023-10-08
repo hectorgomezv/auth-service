@@ -1,19 +1,18 @@
-const { faker } = require('@faker-js/faker');
-const { FORBIDDEN, NOT_FOUND, UNAUTHORIZED } = require('http-status-codes');
-
-const { UserRepository } = require('../../../../../app/domain/repositories');
-const { resetPassword } = require('../../../../../app/domain/use-cases/account');
-
-const {
+import { jest } from '@jest/globals';
+import { faker } from '@faker-js/faker';
+import { StatusCodes } from 'http-status-codes';
+import UserRepository from '../../../../../app/domain/repositories/user-repository';
+import resetPassword from '../../../../../app/domain/use-cases/account/reset-password-uc';
+import {
   EXPIRED_RESET_PASSWORD_CODE,
   INACTIVE_USER_ERROR,
   RESET_PASSWORD_CODE_NOT_FOUND,
-} = require('../../../../../app/domain/use-cases/account/error-messages');
+} from '../../../../../app/domain/use-cases/account/error-messages/error-messages';
 
 const { RESET_PASSWORD_CODE_EXPIRATION } = process.env;
 
-const RESET_PASSWORD_CODE = faker.datatype.uuid();
-const PASSWORD = faker.random.alphaNumeric();
+const RESET_PASSWORD_CODE = faker.string.uuid();
+const PASSWORD = faker.string.alphanumeric();
 
 const DATA = {
   resetPasswordCode: RESET_PASSWORD_CODE,
@@ -22,14 +21,16 @@ const DATA = {
 };
 
 const USER = {
-  _id: faker.random.alphaNumeric(),
+  _id: faker.string.alphanumeric(),
   email: faker.internet.email(),
-  fullName: `${faker.name.firstName()} ${faker.name.lastName}`,
+  fullName: `${faker.person.firstName()} ${faker.person.lastName}`,
   avatarUrl: faker.internet.url(),
   active: true,
-  role: faker.random.word(),
-  resetPasswordCode: faker.datatype.uuid(),
-  resetPasswordExpiration: new Date(Date.now() + Number(RESET_PASSWORD_CODE_EXPIRATION)),
+  role: faker.lorem.word(),
+  resetPasswordCode: faker.string.uuid(),
+  resetPasswordExpiration: new Date(
+    Date.now() + Number(RESET_PASSWORD_CODE_EXPIRATION),
+  ),
 };
 
 describe('[use-cases-tests] [account] [reset-password]', () => {
@@ -44,31 +45,35 @@ describe('[use-cases-tests] [account] [reset-password]', () => {
   });
 
   it('should fail if the password is not repeated', async () => {
-    await expect(resetPassword({
-      ...DATA,
-      repeatedPassword: faker.random.alphaNumeric(),
-    })).rejects.toThrow();
+    await expect(
+      resetPassword({
+        ...DATA,
+        repeatedPassword: faker.string.alphanumeric(),
+      }),
+    ).rejects.toThrow();
   });
 
   it('should fail if the repository cannot find the reset password code', async () => {
     UserRepository.findByResetPasswordCode = jest.fn(() => null);
     await expect(resetPassword(DATA)).rejects.toMatchObject({
-      code: NOT_FOUND,
+      code: StatusCodes.NOT_FOUND,
       name: 'NotFoundError',
       message: RESET_PASSWORD_CODE_NOT_FOUND,
     });
   });
 
   it('should fail if the found user is not active', async () => {
-    UserRepository.findByResetPasswordCode.mockResolvedValue({ ...USER, active: false });
+    UserRepository.findByResetPasswordCode.mockResolvedValue({
+      ...USER,
+      active: false,
+    });
     await expect(resetPassword(DATA)).rejects.toMatchObject({
-      code: UNAUTHORIZED,
+      code: StatusCodes.UNAUTHORIZED,
       name: 'ActivationError',
       message: INACTIVE_USER_ERROR,
       pointer: `email:${USER.email}`,
     });
   });
-
 
   it('should fail if the reset password code is expired', async () => {
     UserRepository.findByResetPasswordCode.mockResolvedValue({
@@ -77,7 +82,7 @@ describe('[use-cases-tests] [account] [reset-password]', () => {
     });
 
     await expect(resetPassword(DATA)).rejects.toMatchObject({
-      code: FORBIDDEN,
+      code: StatusCodes.FORBIDDEN,
       name: 'ForbiddenActionError',
       message: EXPIRED_RESET_PASSWORD_CODE,
     });
@@ -86,7 +91,9 @@ describe('[use-cases-tests] [account] [reset-password]', () => {
   it('should call repository to apply the reset', async () => {
     await resetPassword(DATA);
     expect(UserRepository.applyResetPassword).toHaveBeenCalledTimes(1);
-    expect(UserRepository.applyResetPassword)
-      .toHaveBeenCalledWith(USER._id, expect.any(String));
+    expect(UserRepository.applyResetPassword).toHaveBeenCalledWith(
+      USER._id,
+      expect.any(String),
+    );
   });
 });

@@ -1,5 +1,5 @@
 require('dotenv').config();
-const bcrypt = require('bcrypt');
+import bcrypt from 'bcrypt';
 
 const USERS_COLLECTION = 'users';
 

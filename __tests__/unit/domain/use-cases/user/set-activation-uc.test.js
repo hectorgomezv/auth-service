@@ -1,17 +1,17 @@
-const { faker } = require('@faker-js/faker');
-const { ObjectId } = require('mongodb');
-const { CONFLICT, FORBIDDEN, NOT_ALLOWED } = require('http-status-codes');
-
-const { ROLES } = require('../../../../../app/domain/config/roles-config');
-const { setActivation } = require('../../../../../app/domain/use-cases/user');
-const { UserRepository } = require('../../../../../app/domain/repositories');
-const { RbacEntity } = require('../../../../../app/domain/entities/rbac');
-const { AccessError } = require('../../../../../app/domain/entities/errors');
+import { faker } from '@faker-js/faker';
+import { jest } from '@jest/globals';
+import { StatusCodes } from 'http-status-codes';
+import { ObjectId } from 'mongodb';
+import { ROLES } from '../../../../../app/domain/config/roles-config';
+import AccessError from '../../../../../app/domain/entities/errors/access-error';
+import RbacEntity from '../../../../../app/domain/entities/rbac/rbac-entity';
+import UserRepository from '../../../../../app/domain/repositories/user-repository';
+import setActivation from '../../../../../app/domain/use-cases/user/set-activation-uc';
 
 const USER = {
   _id: ObjectId().toString(),
   email: faker.internet.email(),
-  fullName: `${faker.name.firstName()} ${faker.name.lastName}`,
+  fullName: `${faker.person.firstName()} ${faker.person.lastName}`,
   avatarUrl: faker.internet.url(),
   role: ROLES.USER.name,
 };
@@ -35,23 +35,31 @@ describe('[use-cases-tests] [user] [set-activation]', () => {
   });
 
   it("should not let de user modify it's own status", async () => {
-    await expect(setActivation(CONTEXT, CONTEXT.auth.id, PATCH)).rejects.toThrow({
+    await expect(
+      setActivation(CONTEXT, CONTEXT.auth.id, PATCH),
+    ).rejects.toThrow({
       message: 'Self-(de)activation is not allowed',
-      code: CONFLICT,
+      code: StatusCodes.CONFLICT,
     });
   });
 
   it('should not let the user to (de)activate a superadmin', async () => {
-    UserRepository.findById.mockResolvedValue({ ...USER, role: ROLES.SUPERADMIN.name });
+    UserRepository.findById.mockResolvedValue({
+      ...USER,
+      role: ROLES.SUPERADMIN.name,
+    });
     await expect(setActivation(CONTEXT, USER._id, PATCH)).rejects.toThrow({
       message: 'Not allowed (de)activation',
-      code: FORBIDDEN,
+      code: StatusCodes.FORBIDDEN,
     });
   });
 
   it('should check the user has permissions when (de)activating an admin', async () => {
-    UserRepository.findById.mockResolvedValue({ ...USER, role: ROLES.ADMIN.name });
-    const expectedError = new AccessError(NOT_ALLOWED);
+    UserRepository.findById.mockResolvedValue({
+      ...USER,
+      role: ROLES.ADMIN.name,
+    });
+    const expectedError = new AccessError(StatusCodes.NOT_ALLOWED);
 
     RbacEntity.isUserAllowedTo = jest.fn(() => {
       throw expectedError;
@@ -59,11 +67,15 @@ describe('[use-cases-tests] [user] [set-activation]', () => {
 
     await expect(setActivation(CONTEXT, USER._id, PATCH)).rejects.toThrow();
     expect(RbacEntity.isUserAllowedTo).toHaveBeenCalledTimes(1);
-    expect(RbacEntity.isUserAllowedTo).toHaveBeenCalledWith(CONTEXT, 'delete', 'admin');
+    expect(RbacEntity.isUserAllowedTo).toHaveBeenCalledWith(
+      CONTEXT,
+      'delete',
+      'admin',
+    );
   });
 
   it('should check the user has permissions when (de)activating a user', async () => {
-    const expectedError = new AccessError(NOT_ALLOWED);
+    const expectedError = new AccessError(StatusCodes.NOT_ALLOWED);
 
     RbacEntity.isUserAllowedTo = jest.fn(() => {
       throw expectedError;
@@ -71,7 +83,11 @@ describe('[use-cases-tests] [user] [set-activation]', () => {
 
     await expect(setActivation(CONTEXT, USER._id, PATCH)).rejects.toThrow();
     expect(RbacEntity.isUserAllowedTo).toHaveBeenCalledTimes(1);
-    expect(RbacEntity.isUserAllowedTo).toHaveBeenCalledWith(CONTEXT, 'delete', 'user');
+    expect(RbacEntity.isUserAllowedTo).toHaveBeenCalledWith(
+      CONTEXT,
+      'delete',
+      'user',
+    );
   });
 
   it('should fail if the patch is malformed', async () => {
@@ -81,6 +97,9 @@ describe('[use-cases-tests] [user] [set-activation]', () => {
   it('should call repository to (de)activate the user', async () => {
     await setActivation(CONTEXT, USER._id, PATCH);
     expect(UserRepository.setActivationState).toHaveBeenCalledTimes(1);
-    expect(UserRepository.setActivationState).toHaveBeenCalledWith(USER._id, PATCH.active);
+    expect(UserRepository.setActivationState).toHaveBeenCalledWith(
+      USER._id,
+      PATCH.active,
+    );
   });
 });

@@ -1,17 +1,12 @@
-const { faker } = require('@faker-js/faker');
-const bcrypt = require('bcrypt');
-const { OK } = require('http-status-codes');
-const { MongoMemoryServer } = require('mongodb-memory-server');
+import { faker } from '@faker-js/faker';
+import { jest } from '@jest/globals';
+import bcrypt from 'bcrypt';
+import OK from 'http-status-codes';
+import MongoMemoryServer from 'mongodb-memory-server';
+import { connect } from '../../app/infrastructure/database/mongodb.js';
+import webServer from '../../app/infrastructure/web-server/web-server.js';
 
-const {
-  webServer: {
-    app,
-    mountRouters,
-  },
-  database: {
-    connect,
-  },
-} = require('../../app/infrastructure');
+jest.useFakeTimers();
 
 const URL = '/api/v1/auth/accounts/login';
 
@@ -47,7 +42,7 @@ async function setupData(db) {
 
 describe('[integration-tests] [login]', () => {
   beforeAll(async () => {
-    await mountRouters(app);
+    await webServer.mountRouters(webServer.app);
     const db = await setupDatabase();
 
     return setupData(db);
@@ -59,7 +54,7 @@ describe('[integration-tests] [login]', () => {
   });
 
   it('[200] login successful', async () => {
-    const res = await app.inject({
+    const res = await webServer.app.inject({
       method: 'POST',
       url: URL,
       payload: {

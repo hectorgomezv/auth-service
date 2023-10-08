@@ -1,27 +1,22 @@
-const { faker } = require('@faker-js/faker');
-
-const {
-  NOT_FOUND,
-  NOT_ACCEPTABLE,
-} = require('http-status-codes');
-
-const {
+import { jest } from '@jest/globals';
+import { faker } from '@faker-js/faker';
+import { StatusCodes } from 'http-status-codes';
+import UserRepository from '../../../../../app/domain/repositories/user-repository';
+import activate from '../../../../../app/domain/use-cases/account/activate-uc';
+import {
   ACTIVATION_CODE_NOT_FOUND,
   ALREADY_ACTIVE_ERROR,
-} = require('../../../../../app/domain/use-cases/account/error-messages');
+} from '../../../../../app/domain/use-cases/account/error-messages/error-messages';
 
-const { UserRepository } = require('../../../../../app/domain/repositories');
-const { activate } = require('../../../../../app/domain/use-cases/account');
-
-const ACTIVATION_CODE = faker.datatype.uuid();
-const PASSWORD = faker.random.alphaNumeric();
+const ACTIVATION_CODE = faker.string.uuid();
+const PASSWORD = faker.string.alphanumeric();
 
 const USER = {
   email: faker.internet.email(),
-  fullName: `${faker.name.firstName()} ${faker.name.lastName}`,
+  fullName: `${faker.person.firstName()} ${faker.person.lastName}`,
   avatarUrl: faker.internet.url(),
   active: false,
-  role: faker.random.word(),
+  role: faker.lorem.word(),
 };
 
 const DATA = {
@@ -44,7 +39,7 @@ describe('[use-cases-tests] [account] [activate]', () => {
     await expect(activate(DATA)).rejects.toMatchObject({
       name: 'NotFoundError',
       message: ACTIVATION_CODE_NOT_FOUND,
-      code: NOT_FOUND,
+      code: StatusCodes.NOT_FOUND,
     });
   });
 
@@ -57,14 +52,17 @@ describe('[use-cases-tests] [account] [activate]', () => {
     await expect(activate(DATA)).rejects.toMatchObject({
       name: 'ActivationError',
       message: ALREADY_ACTIVE_ERROR,
-      code: NOT_ACCEPTABLE,
+      code: StatusCodes.NOT_ACCEPTABLE,
     });
   });
 
   it('should activate the account', async () => {
     const result = await activate(DATA);
     expect(UserRepository.activate).toHaveBeenCalledTimes(1);
-    expect(UserRepository.activate).toHaveBeenCalledWith(USER._id, expect.any(String));
+    expect(UserRepository.activate).toHaveBeenCalledWith(
+      USER._id,
+      expect.any(String),
+    );
     expect(result).toMatchObject({
       data: {
         ...USER,

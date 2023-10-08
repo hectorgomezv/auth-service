@@ -60,7 +60,7 @@ const checkUser = async (user) => {
     throw new ActivationError(
       INACTIVE_USER_ERROR,
       `user:${user._id}`,
-      UNAUTHORIZED,
+      StatusCodes.UNAUTHORIZED,
     );
   }
 
@@ -68,7 +68,7 @@ const checkUser = async (user) => {
     throw new NotFoundError(
       SESSION_NOT_FOUND,
       `user:${user._id}`,
-      UNAUTHORIZED,
+      StatusCodes.UNAUTHORIZED,
     );
   }
 };

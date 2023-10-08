@@ -1,22 +1,21 @@
-const bcrypt = require('bcrypt');
-const { faker } = require('@faker-js/faker');
-const jwt = require('jsonwebtoken');
-const { UNAUTHORIZED } = require('http-status-codes');
-
-const { UserRepository } = require('../../../../../app/domain/repositories');
-const { refreshSession } = require('../../../../../app/domain/use-cases/account');
-
-const {
+import { faker } from '@faker-js/faker';
+import { jest } from '@jest/globals';
+import bcrypt from 'bcrypt';
+import { StatusCodes } from 'http-status-codes';
+import jwt from 'jsonwebtoken';
+import UserRepository from '../../../../../app/domain/repositories/user-repository';
+import {
   EXPIRED_TOKEN,
   INACTIVE_USER_ERROR,
   SESSION_NOT_FOUND,
   USER_NOT_FOUND,
-} = require('../../../../../app/domain/use-cases/account/error-messages');
+} from '../../../../../app/domain/use-cases/account/error-messages/error-messages';
+import refreshSession from '../../../../../app/domain/use-cases/account/refresh-session-uc';
 
 const { REFRESH_TOKEN_EXPIRATION } = process.env;
 
-const ACCESS_TOKEN = faker.random.alphaNumeric();
-const REFRESH_TOKEN = faker.random.alphaNumeric();
+const ACCESS_TOKEN = faker.string.alphanumeric();
+const REFRESH_TOKEN = faker.string.alphanumeric();
 
 const DATA = {
   accessToken: ACCESS_TOKEN,
@@ -24,22 +23,25 @@ const DATA = {
 };
 
 const USER = {
-  _id: faker.random.alphaNumeric(),
+  _id: faker.string.alphanumeric(),
   username: faker.internet.userName(),
   email: faker.internet.email(),
-  password: faker.random.alphaNumeric(),
-  fullName: `${faker.name.firstName()} ${faker.name.lastName()}`,
+  password: faker.string.alphanumeric(),
+  fullName: `${faker.person.firstName()} ${faker.person.lastName()}`,
   active: true,
   role: 'role',
-  sessions: [{
-    accessToken: ACCESS_TOKEN,
-    refreshToken: REFRESH_TOKEN,
-    createdAt: new Date(),
-  }, {
-    accessToken: 'anotherAccessToken',
-    refreshToken: 'anotherRefreshToken',
-    createdAt: new Date(),
-  }],
+  sessions: [
+    {
+      accessToken: ACCESS_TOKEN,
+      refreshToken: REFRESH_TOKEN,
+      createdAt: new Date(),
+    },
+    {
+      accessToken: 'anotherAccessToken',
+      refreshToken: 'anotherRefreshToken',
+      createdAt: new Date(),
+    },
+  ],
 };
 
 describe('[use-cases-tests] [account] [refresh-session]', () => {
@@ -48,10 +50,12 @@ describe('[use-cases-tests] [account] [refresh-session]', () => {
     bcrypt.compare = jest.fn(() => true);
     UserRepository.addSession = jest.fn(() => USER);
 
-    UserRepository.findByIdAndFilterSessionByAccessToken = jest.fn().mockResolvedValue({
-      ...USER,
-      sessions: [USER.sessions[0]],
-    });
+    UserRepository.findByIdAndFilterSessionByAccessToken = jest
+      .fn()
+      .mockResolvedValue({
+        ...USER,
+        sessions: [USER.sessions[0]],
+      });
   });
 
   it('should fail if the user cannot be found', async () => {
@@ -59,7 +63,7 @@ describe('[use-cases-tests] [account] [refresh-session]', () => {
     await expect(refreshSession(DATA)).rejects.toMatchObject({
       name: 'NotFoundError',
       message: USER_NOT_FOUND,
-      code: UNAUTHORIZED,
+      code: StatusCodes.UNAUTHORIZED,
     });
   });
 
@@ -72,7 +76,7 @@ describe('[use-cases-tests] [account] [refresh-session]', () => {
     await expect(refreshSession(DATA)).rejects.toMatchObject({
       name: 'ActivationError',
       message: INACTIVE_USER_ERROR,
-      code: UNAUTHORIZED,
+      code: StatusCodes.UNAUTHORIZED,
     });
   });
 
@@ -86,7 +90,7 @@ describe('[use-cases-tests] [account] [refresh-session]', () => {
       name: 'NotFoundError',
       message: SESSION_NOT_FOUND,
       pointer: `user:${USER._id}`,
-      code: UNAUTHORIZED,
+      code: StatusCodes.UNAUTHORIZED,
     });
   });
 
@@ -97,14 +101,14 @@ describe('[use-cases-tests] [account] [refresh-session]', () => {
       name: 'NotFoundError',
       message: SESSION_NOT_FOUND,
       pointer: `user:${USER._id}`,
-      code: UNAUTHORIZED,
+      code: StatusCodes.UNAUTHORIZED,
     });
   });
 
   it('should fail if the token is expired', async () => {
     UserRepository.findByIdAndFilterSessionByAccessToken = jest.fn(() => ({
       ...USER,
-      sessions: USER.sessions.map(session => ({
+      sessions: USER.sessions.map((session) => ({
         ...session,
         createdAt: new Date(Date.now() - Number(REFRESH_TOKEN_EXPIRATION) - 1),
       })),
@@ -114,7 +118,7 @@ describe('[use-cases-tests] [account] [refresh-session]', () => {
       name: 'ForbiddenActionError',
       message: EXPIRED_TOKEN,
       pointer: `user:${USER._id}`,
-      code: UNAUTHORIZED,
+      code: StatusCodes.UNAUTHORIZED,
     });
   });
 
@@ -122,18 +126,22 @@ describe('[use-cases-tests] [account] [refresh-session]', () => {
     const session = await refreshSession(DATA);
     expect(UserRepository.addSession).toHaveBeenCalledTimes(1);
 
-    expect(UserRepository.addSession)
-      .toHaveBeenCalledWith(USER._id, expect.objectContaining({
+    expect(UserRepository.addSession).toHaveBeenCalledWith(
+      USER._id,
+      expect.objectContaining({
         accessToken: expect.any(String),
         refreshToken: expect.any(String),
-      }));
+      }),
+    );
 
-    expect(session).toMatchObject(expect.objectContaining({
-      data: {
-        accessToken: expect.any(String),
-        expiresIn: expect.any(Number),
-      },
-    }));
+    expect(session).toMatchObject(
+      expect.objectContaining({
+        data: {
+          accessToken: expect.any(String),
+          expiresIn: expect.any(Number),
+        },
+      }),
+    );
 
     expect(session).not.toHaveProperty('refreshToken');
   });

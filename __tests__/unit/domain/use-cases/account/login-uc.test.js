@@ -1,14 +1,13 @@
-const bcrypt = require('bcrypt');
-const { faker } = require('@faker-js/faker');
-const { UNAUTHORIZED } = require('http-status-codes');
-
-const {
+import { jest } from '@jest/globals';
+import bcrypt from 'bcrypt';
+import { faker } from '@faker-js/faker';
+import { StatusCodes } from 'http-status-codes';
+import {
   BAD_LOGIN_ERROR,
   INACTIVE_USER_ERROR,
-} = require('../../../../../app/domain/use-cases/account/error-messages');
-
-const { UserRepository } = require('../../../../../app/domain/repositories');
-const { login } = require('../../../../../app/domain/use-cases/account');
+} from '../../../../../app/domain/use-cases/account/error-messages/error-messages';
+import UserRepository from '../../../../../app/domain/repositories/user-repository';
+import login from '../../../../../app/domain/use-cases/account/login-uc';
 
 const EMAIL = faker.internet.email();
 
@@ -19,19 +18,21 @@ const CREDENTIALS = {
 
 const USER = {
   email: EMAIL,
-  fullName: `${faker.name.firstName()} ${faker.name.lastName}`,
+  fullName: `${faker.person.firstName()} ${faker.person.lastName}`,
   avatarUrl: faker.internet.url(),
   active: true,
-  role: faker.random.word(),
+  role: faker.lorem.word(),
 };
 
 const USER_WITH_SESSIONS = {
   ...USER,
-  sessions: [{
-    accessToken: faker.datatype.uuid(),
-    refreshToken: faker.datatype.uuid(),
-    createdAt: faker.date.past(),
-  }],
+  sessions: [
+    {
+      accessToken: faker.string.uuid(),
+      refreshToken: faker.string.uuid(),
+      createdAt: faker.date.past(),
+    },
+  ],
 };
 
 describe('[use-cases-tests] [account] [login]', () => {
@@ -45,7 +46,7 @@ describe('[use-cases-tests] [account] [login]', () => {
     await expect(login(CREDENTIALS)).rejects.toMatchObject({
       name: 'AuthenticationError',
       message: BAD_LOGIN_ERROR,
-      code: UNAUTHORIZED,
+      code: StatusCodes.UNAUTHORIZED,
     });
   });
 
@@ -62,7 +63,7 @@ describe('[use-cases-tests] [account] [login]', () => {
       name: 'AuthenticationError',
       message: INACTIVE_USER_ERROR,
       pointer: `email:${USER.email}`,
-      code: UNAUTHORIZED,
+      code: StatusCodes.UNAUTHORIZED,
     });
   });
 
@@ -76,7 +77,7 @@ describe('[use-cases-tests] [account] [login]', () => {
     await expect(login(CREDENTIALS)).rejects.toMatchObject({
       name: 'AuthenticationError',
       message: BAD_LOGIN_ERROR,
-      code: UNAUTHORIZED,
+      code: StatusCodes.UNAUTHORIZED,
     });
   });
 
