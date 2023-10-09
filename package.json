@@ -26,7 +26,7 @@
     "lodash": "^4.17.21",
     "middie": "^7.1.0",
     "migrate-mongo": "^11.0.0",
-    "mongodb": "^4.5.0",
+    "mongodb": "^6.1.0",
     "nanoid": "^5.0.1",
     "pino": "^8.15.1",
     "rbac": "^5.0.3",
