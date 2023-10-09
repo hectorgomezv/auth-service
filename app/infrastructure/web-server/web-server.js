@@ -24,7 +24,7 @@ app.register(cors, {
 });
 
 const mountRouters = async (appInstance) => {
-  await app.register(middie);
+  app.register(middie);
   appInstance.register(accountRouter, { prefix: `${BASE_URL}/accounts` });
   appInstance.register(userRouter, { prefix: `${BASE_URL}/users` });
 };

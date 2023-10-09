@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker';
 import { jest } from '@jest/globals';
 import bcrypt from 'bcrypt';
 import OK from 'http-status-codes';
-import MongoMemoryServer from 'mongodb-memory-server';
+import { MongoMemoryServer } from 'mongodb-memory-server';
 import { connect } from '../../app/infrastructure/database/mongodb.js';
 import webServer from '../../app/infrastructure/web-server/web-server.js';
 
@@ -31,11 +31,18 @@ async function setupDatabase() {
 }
 
 async function setupData(db) {
-  const col = db.collection('users');
-  await col.insertOne({
-    ...USER,
-    password: await bcrypt.hash(USER.password, 10),
+  const password = await bcrypt.hash(USER.password, 10);
+  await db.createCollection('pets', {
+    validator: { $expr: { $in: ['$kind', ['dog', 'cat', 'fish']] } },
   });
+  const col = db.collection('users');
+  const count2 = await col.countDocuments({});
+  console.log(count2);
+  try {
+    await col.insertOne({ ...USER, password });
+  } catch (err) {
+    console.log(err);
+  }
   const count = await col.countDocuments({});
   expect(count).toBe(1);
 }
