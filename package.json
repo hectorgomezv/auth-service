@@ -27,7 +27,7 @@
     "jsonwebtoken": "^9.0.0",
     "lodash-es": "^4.17.21",
     "migrate-mongo": "^11.0.0",
-    "mongodb": "^4.5.0",
+    "mongodb": "^6.1.0",
     "nanoid": "^5.0.1",
     "pino": "^8.15.1",
     "rbac": "^5.0.3",
@@ -40,7 +40,25 @@
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jest": "^27.2.3",
     "jest": "^29.7.0",
-    "mongodb-memory-server": "8.5.0",
-    "nodemon": "^3.0.1"
+    "mongodb-memory-server": "9.0.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/__tests__/load",
+      "/__tests__/config/",
+      "coverage",
+      "fixtures",
+      "/load/"
+    ],
+    "setupFiles": [
+      "./__tests__/config/setup.js"
+    ],
+    "coverageDirectory": "./__tests__/coverage/",
+    "coveragePathIgnorePatterns": [
+      "/__tests__/"
+    ],
+    "verbose": true
   }
 }
