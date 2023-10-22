@@ -1,5 +1,5 @@
 const profileAdapter = require('./profile-adapter');
 
-module.exports = {
+export default {
   profileAdapter,
 };

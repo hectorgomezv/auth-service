@@ -1,12 +1,12 @@
-const _ = require('lodash');
+import { get } from 'lodash-es';
 
-const { jsonErrorAdapter } = require('../../adapters');
-const { profileAdapter } = require('../../adapters/user');
-const { activate } = require('../../../domain/use-cases/account');
+import jsonErrorAdapter from '../../adapters/json-error-adapter.js';
+import profileAdapter from '../../adapters/user/profile-adapter.js';
+import activate from '../../../domain/use-cases/account/activate-uc.js';
 
-module.exports = async (req, res) => {
+export default async (req, res) => {
   try {
-    const { data } = await activate(_.get(req, 'body.data'));
+    const { data } = await activate(get(req, 'body.data'));
 
     return res.send(profileAdapter(data));
   } catch (err) {

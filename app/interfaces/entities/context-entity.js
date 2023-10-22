@@ -1,4 +1,4 @@
-const { processAuth } = require('./auth-entity');
+import AuthEntity from './auth-entity.js';
 
 /**
  * Adds a context object to the request object.
@@ -10,7 +10,7 @@ const buildContext = (req, res, next) => {
   try {
     const { headers } = req;
     req.context = {
-      auth: processAuth(headers),
+      auth: AuthEntity.processAuth(headers),
     };
   } catch (err) {
     return next(err);
@@ -19,6 +19,6 @@ const buildContext = (req, res, next) => {
   return next();
 };
 
-module.exports = {
+export default {
   buildContext,
 };

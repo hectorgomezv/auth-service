@@ -1,4 +1,4 @@
-const baseTemplate = require('./base-template');
+import baseTemplate from './base-template.js';
 
 const { BASE_URL } = process.env;
 
@@ -14,4 +14,4 @@ function buildResetPasswordTemplate({
   return baseTemplate(data);
 }
 
-module.exports = buildResetPasswordTemplate;
+export default buildResetPasswordTemplate;

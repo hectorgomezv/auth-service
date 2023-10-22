@@ -2,11 +2,12 @@
   "name": "auth-service",
   "version": "0.2.3",
   "description": "",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "dev": "./node_modules/.bin/nodemon ./app",
-    "test": "jest --watch",
-    "test:coverage": "jest -i --collectCoverage --forceExit",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest --watch",
+    "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest -i --collectCoverage --forceExit",
     "start": "node ./app",
     "postversion": "git push && git push --tags"
   },
@@ -15,6 +16,7 @@
   "license": "ISC",
   "dependencies": {
     "@fastify/cors": "^8.3.0",
+    "@fastify/middie": "^8.3.0",
     "@sendgrid/mail": "^7.6.2",
     "agenda": "^5.0.0",
     "bcrypt": "^5.0.1",
@@ -23,8 +25,7 @@
     "http-status-codes": "^2.2.0",
     "joi": "^17.6.0",
     "jsonwebtoken": "^9.0.0",
-    "lodash": "^4.17.21",
-    "middie": "^7.1.0",
+    "lodash-es": "^4.17.21",
     "migrate-mongo": "^11.0.0",
     "mongodb": "^6.1.0",
     "nanoid": "^5.0.1",
@@ -39,25 +40,6 @@
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jest": "^27.2.3",
     "jest": "^29.7.0",
-    "mongodb-memory-server": "9.0.1"
-  },
-  "jest": {
-    "testEnvironment": "node",
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      "/__tests__/load",
-      "/__tests__/config/",
-      "coverage",
-      "fixtures",
-      "/load/"
-    ],
-    "setupFiles": [
-      "./__tests__/config/setup.js"
-    ],
-    "coverageDirectory": "./__tests__/coverage/",
-    "coveragePathIgnorePatterns": [
-      "/__tests__/"
-    ],
-    "verbose": true
+    "nodemon": "^3.0.1"
   }
 }

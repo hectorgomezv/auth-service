@@ -1,3 +1,3 @@
-const { UserRepository } = require('../../repositories');
+import UserRepository from '../../repositories/user-repository.js';
 
-module.exports = async () => UserRepository.clearExpiredSessions();
+export default async () => UserRepository.clearExpiredSessions();

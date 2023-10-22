@@ -1,11 +1,7 @@
-const Agenda = require('agenda');
+import Agenda from 'agenda';
+import clearExpiredSessions from '../../domain/use-cases/user/clear-expired-sessions-uc.js';
 
-const { clearExpiredSessions } = require('../../domain/use-cases/user');
-
-const {
-  MONGO_CONNECTION_STRING,
-  MONGO_DATABASE_NAME,
-} = process.env;
+const { MONGO_CONNECTION_STRING, MONGO_DATABASE_NAME } = process.env;
 
 const agenda = new Agenda({
   db: {
@@ -22,6 +18,6 @@ const init = async () => {
   await agenda.every('1 minute', 'delete old sessions');
 };
 
-module.exports = {
+export default {
   init,
 };

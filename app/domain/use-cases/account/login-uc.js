@@ -1,21 +1,14 @@
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-
-const { loginValidator } = require('./validators');
-
-const {
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import loginValidator from './validators/login-validator.js';
+import {
   BAD_LOGIN_ERROR,
   INACTIVE_USER_ERROR,
-} = require('./error-messages');
+} from './error-messages/error-messages.js';
+import AuthenticationError from '../errors/authentication-error.js';
+import UserRepository from '../../repositories/user-repository.js';
 
-const { AuthenticationError } = require('../errors');
-const { UserRepository } = require('../../repositories');
-
-const {
-  JWT_SECRET,
-  TOKEN_EXPIRATION,
-  REFRESH_TOKEN_EXPIRATION,
-} = process.env;
+const { JWT_SECRET, TOKEN_EXPIRATION, REFRESH_TOKEN_EXPIRATION } = process.env;
 
 /**
  * Verifies the passed email belong to a user who is active.
@@ -54,20 +47,30 @@ const checkPassword = async (savedPasswordHash, password) => {
  * Issues an accessToken containing the info of the passed user.
  * @param {User} user user to use.
  */
-const generateAccessToken = (user) => jwt.sign({
-  id: user._id,
-  email: user.email,
-  role: user.role,
-}, JWT_SECRET, { expiresIn: Number(TOKEN_EXPIRATION) });
+const generateAccessToken = (user) =>
+  jwt.sign(
+    {
+      id: user._id,
+      email: user.email,
+      role: user.role,
+    },
+    JWT_SECRET,
+    { expiresIn: Number(TOKEN_EXPIRATION) },
+  );
 
 /**
  * Issues an refreshToken containing only the user id and email.
  * @param {User} user user to use.
  */
-const generateRefreshToken = (user) => jwt.sign({
-  id: user._id,
-  email: user.email,
-}, JWT_SECRET, { expiresIn: Number(REFRESH_TOKEN_EXPIRATION) });
+const generateRefreshToken = (user) =>
+  jwt.sign(
+    {
+      id: user._id,
+      email: user.email,
+    },
+    JWT_SECRET,
+    { expiresIn: Number(REFRESH_TOKEN_EXPIRATION) },
+  );
 
 /**
  * Executes a login action with the passed data.
@@ -100,4 +103,4 @@ const execute = async (data) => {
   };
 };
 
-module.exports = execute;
+export default execute;

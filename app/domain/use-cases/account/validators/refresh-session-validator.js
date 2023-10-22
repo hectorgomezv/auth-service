@@ -1,4 +1,4 @@
-const Joi = require('joi');
+import Joi from 'joi';
 
 /**
  * Validates the passed refresh session data.
@@ -6,9 +6,11 @@ const Joi = require('joi');
  * @param {String} data.refreshToken refresh token.
  */
 
-const schema = Joi.object().keys({
-  accessToken: Joi.string().required().label('accessToken'),
-  refreshToken: Joi.string().required().label('refreshToken'),
-}).required();
+const schema = Joi.object()
+  .keys({
+    accessToken: Joi.string().required().label('accessToken'),
+    refreshToken: Joi.string().required().label('refreshToken'),
+  })
+  .required();
 
-module.exports = async (data) => schema.validateAsync(data);
+export default async (data) => schema.validateAsync(data);

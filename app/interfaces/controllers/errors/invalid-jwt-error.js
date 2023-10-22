@@ -1,14 +1,14 @@
-const { UNAUTHORIZED } = require('http-status-codes');
+import { StatusCodes } from 'http-status-codes';
 
 class InvalidJWTError extends Error {
   constructor(message, pointer, code, data) {
     super();
     this.name = 'InvalidJWTError';
     this.message = message;
-    this.code = code || UNAUTHORIZED;
+    this.code = code || StatusCodes.UNAUTHORIZED;
     this.pointer = pointer;
     this.data = data;
   }
 }
 
-module.exports = InvalidJWTError;
+export default InvalidJWTError;

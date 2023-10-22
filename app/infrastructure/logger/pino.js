@@ -1,8 +1,6 @@
-const Pino = require('pino');
+import Pino from 'pino';
 
-const logger = Pino({
+export default Pino({
   level: 'info',
   timestamp: Pino.stdTimeFunctions.isoTime,
 });
-
-module.exports = logger;

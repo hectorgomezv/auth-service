@@ -1,11 +1,13 @@
-const { jsonErrorAdapter } = require('../../adapters');
-const { profileAdapter } = require('../../adapters/user');
-const { login } = require('../../../domain/use-cases/account');
+import jsonErrorAdapter from '../../adapters/json-error-adapter.js';
+import profileAdapter from '../../adapters/user/profile-adapter.js';
+import login from '../../../domain/use-cases/account/login-uc.js';
 
-module.exports = async (req, res) => {
+export default async (req, res) => {
   try {
     const data = (req.body && req.body.data) || {};
-    const { data: { user, ...rest } } = await login(data);
+    const {
+      data: { user, ...rest },
+    } = await login(data);
 
     return res.send({
       data: {

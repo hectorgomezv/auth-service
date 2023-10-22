@@ -1,6 +1,6 @@
-const _ = require('lodash');
-const jwt = require('jsonwebtoken');
-const { InvalidJWTError } = require('../controllers/errors');
+import { get, isString } from 'lodash-es';
+import jwt from 'jsonwebtoken';
+import InvalidJWTError from '../controllers/errors/invalid-jwt-error.js';
 
 const { JWT_SECRET } = process.env;
 
@@ -12,8 +12,12 @@ const { JWT_SECRET } = process.env;
  * @throws {InvalidJWTError} if the Authorization header is not sent.
  */
 const extractAccessToken = (headers) => {
-  const authorization = _.get(headers, 'authorization');
-  if (!authorization || !_.isString(authorization) || !authorization.startsWith('Bearer ')) {
+  const authorization = get(headers, 'authorization');
+  if (
+    !authorization ||
+    !isString(authorization) ||
+    !authorization.startsWith('Bearer ')
+  ) {
     throw new InvalidJWTError('Authorization required');
   }
 
@@ -29,12 +33,7 @@ const extractAccessToken = (headers) => {
 const processAuth = (headers) => {
   try {
     const token = extractAccessToken(headers);
-    const {
-      id,
-      email,
-      role,
-      exp,
-    } = jwt.verify(token, JWT_SECRET);
+    const { id, email, role, exp } = jwt.verify(token, JWT_SECRET);
 
     return {
       id,
@@ -48,6 +47,6 @@ const processAuth = (headers) => {
   }
 };
 
-module.exports = {
+export default {
   processAuth,
 };

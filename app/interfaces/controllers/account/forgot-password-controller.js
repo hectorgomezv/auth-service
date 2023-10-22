@@ -1,7 +1,7 @@
-const { jsonErrorAdapter } = require('../../adapters');
-const { forgotPassword } = require('../../../domain/use-cases/account');
+import jsonErrorAdapter from '../../adapters/json-error-adapter.js';
+import forgotPassword from '../../../domain/use-cases/account/forgot-password-uc.js';
 
-module.exports = async (req, res) => {
+export default async (req, res) => {
   try {
     const data = (req.body && req.body.data) || {};
     await forgotPassword(data);

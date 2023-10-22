@@ -4,7 +4,7 @@ const createUserController = require('./create-user-controller');
 const deactivateUserController = require('./deactivate-user-controller');
 const activationController = require('./activation-controller');
 
-module.exports = {
+export default {
   getUserController,
   getUsersController,
   createUserController,

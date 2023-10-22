@@ -1,19 +1,15 @@
-const {
-  BAD_REQUEST,
-  INTERNAL_SERVER_ERROR,
-} = require('http-status-codes');
-
-const { UnknownError } = require('./errors');
+import { StatusCodes } from 'http-status-codes';
+import UnknownError from './errors/unknown-error.js';
 
 const adaptValidationError = ({ details: [validationError] }) => ({
-  status: BAD_REQUEST,
+  status: StatusCodes.BAD_REQUEST,
   title: 'ValidationError',
   detail: validationError.message,
   data: validationError,
 });
 
 const adaptError = ({
-  code = INTERNAL_SERVER_ERROR,
+  code = StatusCodes.INTERNAL_SERVER_ERROR,
   name,
   pointer,
   message,
@@ -26,7 +22,7 @@ const adaptError = ({
   data,
 });
 
-module.exports = (err) => {
+export default (err) => {
   if (err.isJoi) return adaptValidationError(err);
   if (!err.name) return adaptError(new UnknownError());
   return adaptError(err);

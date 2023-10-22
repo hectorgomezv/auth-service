@@ -1,8 +1,5 @@
 function buildBaseTemplate(data) {
-  const {
-    title,
-    actionUrl,
-  } = data;
+  const { title, actionUrl } = data;
 
   const template = `
   <!DOCTYPE html>
@@ -24,4 +21,4 @@ function buildBaseTemplate(data) {
   return template.replace(/[\n\r]+/g, '').replace(/\s{2,10}/g, '');
 }
 
-module.exports = buildBaseTemplate;
+export default buildBaseTemplate;

@@ -1,17 +1,17 @@
-const { faker } = require('@faker-js/faker');
-const { ObjectId } = require('mongodb');
-
-const { RbacEntity } = require('../../../../../app/domain/entities/rbac');
-const { UserRepository } = require('../../../../../app/domain/repositories');
-const { getUser } = require('../../../../../app/domain/use-cases/user');
-const { AccessError } = require('../../../../../app/domain/entities/errors');
-const { NOT_ALLOWED } = require('../../../../../app/domain/entities/rbac/error-messages');
-const { ROLES } = require('../../../../../app/domain/config/roles-config');
+import { faker } from '@faker-js/faker';
+import { jest } from '@jest/globals';
+import { ObjectId } from 'mongodb';
+import { ROLES } from '../../../../../app/domain/config/roles-config';
+import AccessError from '../../../../../app/domain/entities/errors/access-error';
+import { NOT_ALLOWED } from '../../../../../app/domain/entities/rbac/error-messages/error-messages';
+import RbacEntity from '../../../../../app/domain/entities/rbac/rbac-entity';
+import UserRepository from '../../../../../app/domain/repositories/user-repository';
+import getUser from '../../../../../app/domain/use-cases/user/get-user-uc';
 
 const USER = {
-  _id: ObjectId(),
+  _id: new ObjectId(),
   email: faker.internet.email(),
-  fullName: `${faker.name.firstName()} ${faker.name.lastName}`,
+  fullName: `${faker.person.firstName()} ${faker.person.lastName}`,
   avatarUrl: faker.internet.url(),
   role: 'user',
 };
@@ -36,15 +36,18 @@ describe('[use-cases-tests] [user] [get-user]', () => {
       throw expectedError;
     });
 
-    await expect(getUser({
-      ...CONTEXT,
-      auth: {
-        ...CONTEXT.auth,
-        id: ObjectId(),
-      },
-    }, USER._id))
-      .rejects
-      .toEqual(expectedError);
+    await expect(
+      getUser(
+        {
+          ...CONTEXT,
+          auth: {
+            ...CONTEXT.auth,
+            id: new ObjectId(),
+          },
+        },
+        USER._id,
+      ),
+    ).rejects.toEqual(expectedError);
   });
 
   it('should let users get their own profile', async () => {
@@ -59,7 +62,10 @@ describe('[use-cases-tests] [user] [get-user]', () => {
   });
 
   it('should return the profile when the role allows to', async () => {
-    const user = await getUser({ ...CONTEXT, auth: { ...CONTEXT.auth, id: ObjectId() } }, USER._id);
+    const user = await getUser(
+      { ...CONTEXT, auth: { ...CONTEXT.auth, id: new ObjectId() } },
+      USER._id,
+    );
     expect(user).toEqual(USER);
   });
 });

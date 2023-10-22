@@ -1,5 +1,5 @@
-const { RbacEntity } = require('../../entities/rbac');
-const { UserRepository } = require('../../repositories');
+import RbacEntity from '../../entities/rbac/rbac-entity.js';
+import UserRepository from '../../repositories/user-repository.js';
 
 /**
  * Get user by Id from the user repository.
@@ -11,4 +11,4 @@ const execute = async (context) => {
   return UserRepository.find();
 };
 
-module.exports = execute;
+export default execute;
