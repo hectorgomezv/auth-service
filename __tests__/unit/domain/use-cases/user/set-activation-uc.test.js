@@ -9,7 +9,7 @@ import UserRepository from '../../../../../app/domain/repositories/user-reposito
 import setActivation from '../../../../../app/domain/use-cases/user/set-activation-uc';
 
 const USER = {
-  _id: ObjectId().toString(),
+  _id: new ObjectId().toString(),
   email: faker.internet.email(),
   fullName: `${faker.person.firstName()} ${faker.person.lastName}`,
   avatarUrl: faker.internet.url(),
@@ -18,7 +18,7 @@ const USER = {
 
 const CONTEXT = {
   auth: {
-    id: ObjectId().toString(),
+    id: new ObjectId().toString(),
     role: ROLES.ADMIN.name,
   },
 };

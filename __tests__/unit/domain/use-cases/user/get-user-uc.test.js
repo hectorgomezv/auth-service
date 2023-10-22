@@ -9,7 +9,7 @@ import UserRepository from '../../../../../app/domain/repositories/user-reposito
 import getUser from '../../../../../app/domain/use-cases/user/get-user-uc';
 
 const USER = {
-  _id: ObjectId(),
+  _id: new ObjectId(),
   email: faker.internet.email(),
   fullName: `${faker.person.firstName()} ${faker.person.lastName}`,
   avatarUrl: faker.internet.url(),
@@ -42,7 +42,7 @@ describe('[use-cases-tests] [user] [get-user]', () => {
           ...CONTEXT,
           auth: {
             ...CONTEXT.auth,
-            id: ObjectId(),
+            id: new ObjectId(),
           },
         },
         USER._id,
@@ -63,7 +63,7 @@ describe('[use-cases-tests] [user] [get-user]', () => {
 
   it('should return the profile when the role allows to', async () => {
     const user = await getUser(
-      { ...CONTEXT, auth: { ...CONTEXT.auth, id: ObjectId() } },
+      { ...CONTEXT, auth: { ...CONTEXT.auth, id: new ObjectId() } },
       USER._id,
     );
     expect(user).toEqual(USER);
