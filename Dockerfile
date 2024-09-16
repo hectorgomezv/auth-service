@@ -8,8 +8,8 @@ COPY ./migrations ./migrations
 COPY ./migrate-mongo-config.js ./
 COPY ./package*.json ./
 
-RUN npm i
+RUN yarn
 
 EXPOSE 4200
 
-CMD ["npm", "run", "start"]
+CMD ["yarn", "run", "start"]
