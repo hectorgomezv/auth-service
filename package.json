@@ -16,7 +16,7 @@
   "license": "ISC",
   "dependencies": {
     "@fastify/cors": "^9.0.0",
-    "@fastify/middie": "^8.3.0",
+    "@fastify/middie": "^9.0.2",
     "@sendgrid/mail": "^8.1.0",
     "agenda": "^5.0.0",
     "bcrypt": "^5.0.1",
