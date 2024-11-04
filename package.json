@@ -21,7 +21,7 @@
     "agenda": "^5.0.0",
     "bcrypt": "^5.0.1",
     "dotenv": "^16.0.0",
-    "fastify": "^4.22.2",
+    "fastify": "^5.1.0",
     "http-status-codes": "^2.2.0",
     "joi": "^17.6.0",
     "jsonwebtoken": "^9.0.0",
