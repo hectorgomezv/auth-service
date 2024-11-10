@@ -8,7 +8,7 @@ import userRouter from '../../interfaces/routers/user-router.js';
 
 const { CORS_BASE_URL, PORT } = process.env;
 
-const app = fastify({ logger });
+const app = fastify({ loggerInstance: logger });
 const BASE_URL = '/api/v1/auth';
 
 const getAllowedOrigins = () => {
