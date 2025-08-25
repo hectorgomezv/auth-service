@@ -23,7 +23,7 @@
     "dotenv": "^16.0.0",
     "fastify": "^5.1.0",
     "http-status-codes": "^2.2.0",
-    "joi": "^17.6.0",
+    "joi": "^18.0.1",
     "jsonwebtoken": "^9.0.0",
     "lodash-es": "^4.17.21",
     "migrate-mongo": "^11.0.0",
