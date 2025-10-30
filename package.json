@@ -6,6 +6,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "./node_modules/.bin/nodemon ./app",
+    "migrate": "./node_modules/.bin/migrate-mongo up -f migrate-mongo-config.cjs",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest --watch",
     "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest -i --collectCoverage --forceExit",
     "start": "node ./app",

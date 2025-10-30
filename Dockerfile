@@ -5,7 +5,7 @@ WORKDIR /usr/src/app
 
 COPY ./app ./app
 COPY ./migrations ./migrations
-COPY ./migrate-mongo-config.js ./
+COPY ./migrate-mongo-config.cjs ./
 COPY ./package*.json ./
 
 RUN yarn
