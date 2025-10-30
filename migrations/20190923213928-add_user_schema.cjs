@@ -49,7 +49,7 @@ const up = async (db) =>
 
 const down = async (db) => db.collection(USERS_COLLECTION).drop();
 
-export default {
+module.exports = {
   up,
   down,
 };

@@ -1,12 +1,13 @@
-import 'dotenv/config';
+require('dotenv').config();
 
 const { MONGO_CONNECTION_STRING, MONGO_DATABASE_NAME } = process.env;
 
-export default {
+module.exports = {
   mongodb: {
     url: MONGO_CONNECTION_STRING,
     databaseName: MONGO_DATABASE_NAME,
   },
   migrationsDir: 'migrations',
   changelogCollectionName: 'changelog',
+  migrationFileExtension: '.cjs',
 };

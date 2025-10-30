@@ -1,5 +1,5 @@
 require('dotenv').config();
-import bcrypt from 'bcrypt';
+const bcrypt = require('bcrypt');
 
 const USERS_COLLECTION = 'users';
 
@@ -21,7 +21,7 @@ const down = async (db) =>
     email: SUPERADMIN_EMAIL,
   });
 
-export default {
+module.exports = {
   up,
   down,
 };
