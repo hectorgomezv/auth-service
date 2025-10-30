@@ -1252,13 +1252,13 @@
   resolved "https://registry.yarnpkg.com/@rtsao/scc/-/scc-1.1.0.tgz#927dd2fae9bc3361403ac2c7a00c32ddce9ad7e8"
   integrity sha512-zt6OdqaDoOnJ1ZYsCYGt9YmWzDXl4vQdKTyJev62gFhRGKdx7mcT54V9KIjg+d2wi9EXsPvAPKe7i7WjfVWB8g==
 
-"@sendgrid/client@^8.1.4":
-  version "8.1.4"
-  resolved "https://registry.yarnpkg.com/@sendgrid/client/-/client-8.1.4.tgz#4db39e49d8ed732169d73b5d5c94d2b11907970d"
-  integrity sha512-VxZoQ82MpxmjSXLR3ZAE2OWxvQIW2k2G24UeRPr/SYX8HqWLV/8UBN15T2WmjjnEb5XSmFImTJOKDzzSeKr9YQ==
+"@sendgrid/client@^8.1.5":
+  version "8.1.6"
+  resolved "https://registry.yarnpkg.com/@sendgrid/client/-/client-8.1.6.tgz#b8e1a30e6e3d4b6e425d68e6c373047046a809ca"
+  integrity sha512-/BHu0hqwXNHr2aLhcXU7RmmlVqrdfrbY9KpaNj00KZHlVOVoRxRVrpOCabIB+91ISXJ6+mLM9vpaVUhK6TwBWA==
   dependencies:
     "@sendgrid/helpers" "^8.0.0"
-    axios "^1.7.4"
+    axios "^1.12.0"
 
 "@sendgrid/helpers@^8.0.0":
   version "8.0.0"
@@ -1268,11 +1268,11 @@
     deepmerge "^4.2.2"
 
 "@sendgrid/mail@^8.1.0":
-  version "8.1.4"
-  resolved "https://registry.yarnpkg.com/@sendgrid/mail/-/mail-8.1.4.tgz#0ba72906685eae1a1ef990cca31e962f1ece6928"
-  integrity sha512-MUpIZykD9ARie8LElYCqbcBhGGMaA/E6I7fEcG7Hc2An26QJyLtwOaKQ3taGp8xO8BICPJrSKuYV4bDeAJKFGQ==
+  version "8.1.6"
+  resolved "https://registry.yarnpkg.com/@sendgrid/mail/-/mail-8.1.6.tgz#9c253c13d49867fdb6f7df1360643825236eef22"
+  integrity sha512-/ZqxUvKeEztU9drOoPC/8opEPOk+jLlB2q4+xpx6HVLq6aFu3pMpalkTpAQz8XfRfpLp8O25bh6pGPcHDCYpqg==
   dependencies:
-    "@sendgrid/client" "^8.1.4"
+    "@sendgrid/client" "^8.1.5"
     "@sendgrid/helpers" "^8.0.0"
 
 "@sinclair/typebox@^0.27.8":
@@ -2076,10 +2076,10 @@ avvio@^9.0.0:
     "@fastify/error" "^4.0.0"
     fastq "^1.17.1"
 
-axios@^1.7.4:
-  version "1.12.2"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-1.12.2.tgz#6c307390136cf7a2278d09cec63b136dfc6e6da7"
-  integrity sha512-vMJzPewAlRyOgxV2dU0Cuz2O8zzzx9VYtbJOaBgXFeLc4IV/Eg50n4LowmehOOR61S8ZMpc2K5Sa7g6A4jfkUw==
+axios@^1.12.0:
+  version "1.13.1"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.13.1.tgz#45b62dc8fe04e0e92274e08b98e910ba3d7963a7"
+  integrity sha512-hU4EGxxt+j7TQijx1oYdAjw4xuIp1wRQSsbMFwSthCWeBQur1eF+qJ5iQ5sN3Tw8YRzQNKb8jszgBdMDVqwJcw==
   dependencies:
     follow-redirects "^1.15.6"
     form-data "^4.0.4"
